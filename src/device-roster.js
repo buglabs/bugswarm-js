@@ -27,7 +27,7 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   *
   * i.e. foo@xmpp.bugswarm.net
   */
-  var barejid = bugswarm.barejid();
+  var barejid = session.barejid();
 
   /**
   * Presence callback. 

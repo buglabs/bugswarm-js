@@ -9,4 +9,4 @@ var Swarm = BugSwarm.Swarm = function(options) {
   my.onPresence = function(fn) {};
 
   return my;
-}
+};

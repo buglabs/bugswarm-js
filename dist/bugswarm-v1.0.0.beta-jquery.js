@@ -12285,7 +12285,7 @@ var Device = BugSwarm.Device = function(bugswarm) {
   my.models = function() {};
 
   return my;
-}
+};
 
 var DeviceService = BugSwarm.DeviceService = function() {
   var my = {};
@@ -12295,7 +12295,7 @@ var DeviceService = BugSwarm.DeviceService = function() {
   my.get = function(){};
 
   return my;
-}
+};
 
 var DeviceModel = BugSwarm.DeviceModel = function() {
   var my = {};
@@ -12309,7 +12309,7 @@ var DeviceModel = BugSwarm.DeviceModel = function() {
   };
   
   return my;
-}
+};
 
 
 var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
@@ -12340,7 +12340,7 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   *
   * i.e. foo@xmpp.bugswarm.net
   */
-  var barejid = bugswarm.barejid();
+  var barejid = session.barejid();
 
   /**
   * Presence callback. 
@@ -12591,7 +12591,7 @@ var Swarm = BugSwarm.Swarm = function(options) {
   my.onPresence = function(fn) {};
 
   return my;
-}
+};
 
 
 return (window.BugLabs = BugLabs);
