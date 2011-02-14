@@ -109,9 +109,17 @@ var Connection = BugSwarm.Connection = function(fn, config) {
     return barejid;
   };
 
-  my.send = xmppsrv.send;
-  my.sendIQ = xmppsrv.sendIQ;
-  my.addHandler = xmppsrv.addHandler;
+  my.send = function(elem) {
+    xmppsrv.send(elem);
+  }; 
+
+  my.sendIQ = function(elem, callback, errback, timeout) {
+    xmppsrv.sendIQ(elem, callback, errback, timeout);
+  };
+
+  my.addHandler = function(handler, ns, name, type, id, from, options) {
+    xmppsrv.addHandler(handler, ns, name, type, id, from, options);
+  };
 
   return my;
 };

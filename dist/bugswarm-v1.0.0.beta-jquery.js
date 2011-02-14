@@ -12180,9 +12180,17 @@ var Connection = BugSwarm.Connection = function(fn, config) {
     return barejid;
   };
 
-  my.send = xmppsrv.send;
-  my.sendIQ = xmppsrv.sendIQ;
-  my.addHandler = xmppsrv.addHandler;
+  my.send = function(elem) {
+    xmppsrv.send(elem);
+  }; 
+
+  my.sendIQ = function(elem, callback, errback, timeout) {
+    xmppsrv.sendIQ(elem, callback, errback, timeout);
+  };
+
+  my.addHandler = function(handler, ns, name, type, id, from, options) {
+    xmppsrv.addHandler(handler, ns, name, type, id, from, options);
+  };
 
   return my;
 };
@@ -12220,7 +12228,7 @@ var Session = BugSwarm.Session = function(fn, cfg) {
   * @param {String} User name
   * @param {String} Super secret password
   * 
-  * @api public
+  * @api 
   */
 
   my.start = function(username, password) {
@@ -12258,6 +12266,10 @@ var Session = BugSwarm.Session = function(fn, cfg) {
 
   my.connection = function() {
     return conn;
+  };
+
+  my.config = function() {
+    return config;
   };
 
   return my;
@@ -12341,6 +12353,17 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   * i.e. foo@xmpp.bugswarm.net
   */
   var barejid = session.barejid();
+
+  /**
+  * User provided configuration
+  * expanded with the internal configuration
+  * 
+  * @type Object
+  * @api private
+  */
+
+
+  var config = session.config();
 
   /**
   * Presence callback. 
