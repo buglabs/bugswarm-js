@@ -4108,7 +4108,7 @@ var Device = BugSwarm.Device = function(bugswarm) {
   my.models = function() {};
 
   return my;
-}
+};
 
 var DeviceService = BugSwarm.DeviceService = function() {
   var my = {};
@@ -4118,7 +4118,7 @@ var DeviceService = BugSwarm.DeviceService = function() {
   my.get = function(){};
 
   return my;
-}
+};
 
 var DeviceModel = BugSwarm.DeviceModel = function() {
   var my = {};
@@ -4132,7 +4132,7 @@ var DeviceModel = BugSwarm.DeviceModel = function() {
   };
   
   return my;
-}
+};
 
 
 var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
