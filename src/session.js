@@ -31,7 +31,7 @@ var Session = BugSwarm.Session = function(fn, cfg) {
   * @param {String} User name
   * @param {String} Super secret password
   * 
-  * @api public
+  * @api 
   */
 
   my.start = function(username, password) {
@@ -69,6 +69,10 @@ var Session = BugSwarm.Session = function(fn, cfg) {
 
   my.connection = function() {
     return conn;
+  };
+
+  my.config = function() {
+    return config;
   };
 
   return my;

@@ -30,6 +30,17 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   var barejid = session.barejid();
 
   /**
+  * User provided configuration
+  * expanded with the internal configuration
+  * 
+  * @type Object
+  * @api private
+  */
+
+
+  var config = session.config();
+
+  /**
   * Presence callback. 
   * It is called when the roster receives
   * device presence notifications from the server
