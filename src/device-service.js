@@ -6,4 +6,4 @@ var DeviceService = BugSwarm.DeviceService = function() {
   my.get = function(){};
 
   return my;
-}
+};

@@ -19,4 +19,4 @@ var Device = BugSwarm.Device = function(bugswarm) {
   my.models = function() {};
 
   return my;
-}
+};

@@ -10,4 +10,4 @@ var DeviceModel = BugSwarm.DeviceModel = function() {
   };
   
   return my;
-}
+};
