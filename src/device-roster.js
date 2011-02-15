@@ -48,7 +48,7 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   * @api private
   */
 
-  var onpresence;
+  var onpresence = function(){};
 
   /**
   * Roster change callback
@@ -59,7 +59,7 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   * @api private
   */
 
-  var onchange;
+  var onchange = function(){};
 
   /**
   * Devices callback
@@ -71,7 +71,7 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   * @api private
   */
 
-  var ondevices;
+  var ondevices = function(){};
 
   /**
   * Set up the callback to receive the
@@ -130,8 +130,9 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
       var error = $(presence).find('error').text() || '';   
    
       //ignoring my own presence
-      var me = config.resource + '-jsapi-' + config.version;
-      if(resource == me) { 
+      var me = barejid + '/' + config.resource + 
+                '-jsapi-' + config.version;
+      if(from == me) { 
         config.debug && console.log('ignoring my own presence'); 
         return true;
       }

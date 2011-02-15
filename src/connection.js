@@ -1,3 +1,7 @@
+/**
+* Connection Class
+*
+*/
 
 var Connection = BugSwarm.Connection = function(config) {
   /**
@@ -22,6 +26,24 @@ var Connection = BugSwarm.Connection = function(config) {
   */
 
   var barejid;
+
+
+  /**
+  * User provided callback which is called 
+  * once the connection to the server ends.
+  * 
+  * It needs to be global because Strophe
+  * receives just one function to handle 
+  * the entire connection life cycle. This 
+  * callback is set it up in my.disconnect 
+  * function and gets executed inside the main
+  * callback which is the last parameter
+  * provided by the user to the my.connect() 
+  * function.
+  * 
+  * @type Function
+  * @api private
+  */
   
   var disconnectCallback;
 
@@ -39,7 +61,7 @@ var Connection = BugSwarm.Connection = function(config) {
   * @api public
   */ 
     
-  my.status = Strophe.Status;
+  //my.status = Strophe.Status;
 
   /** 
   * Strophe specific code to connect against 
@@ -47,10 +69,11 @@ var Connection = BugSwarm.Connection = function(config) {
   *
   * @param {String} User name
   * @param {String} Password
-  * @param {Function} Callback through which we send every event associated 
+  * @param {Function} Main callback through which 
+  * we send every event associated 
   * with the xmpp connection life cycle.
   * 
-  * @api public
+  * @api private
   */
 
   my.connect = function (username, password, fn) {
@@ -64,11 +87,16 @@ var Connection = BugSwarm.Connection = function(config) {
           xmppsrv.send($pres({xmlns:Strophe.NS.CLIENT}).tree());
 
           barejid = Strophe.getBareJidFromJid(username);
+        
+          debug && console.log('Connected as ' + username);
+
           callback(status);
       } else if( status == Strophe.Status.ERROR ||
                  status == Strophe.Status.AUTHFAIL) {
           callback(status, error);
       } else if( status == Strophe.Status.DISCONNECTED) {
+        debug && console.log('Disconnected');
+
         disconnectCallback(status, error);
       }
            
@@ -123,17 +151,38 @@ var Connection = BugSwarm.Connection = function(config) {
     xmppsrv.disconnect();
   };
 
+  /**
+  * Returns the bare jabber id
+  * 
+  * @api private
+  */ 
+
   my.barejid = function() {
     return barejid;
   };
+
+  /**
+  * Simple wrapper for Strophe send function
+  * @api private
+  */
 
   my.send = function(elem) {
     xmppsrv.send(elem);
   }; 
 
+  /**
+  * Simple wrapper for Strophe sendIQ function
+  * @api private
+  */
+
   my.sendIQ = function(elem, callback, errback, timeout) {
     xmppsrv.sendIQ(elem, callback, errback, timeout);
   };
+
+  /**
+  * Simple wrapper for Strophe addHandler function
+  * @api private
+  */
 
   my.addHandler = function(handler, ns, name, type, id, from, options) {
     xmppsrv.addHandler(handler, ns, name, type, id, from, options);
@@ -141,3 +190,13 @@ var Connection = BugSwarm.Connection = function(config) {
 
   return my;
 };
+
+/*
+* Public constants
+* @api public
+*/
+Connection.CONNECTED = Strophe.Status.CONNECTED;
+Connection.DISCONNECTED = Strophe.Status.DISCONNECTED;
+Connection.ERROR = Strophe.Status.ERROR;
+Connection.AUTHFAIL = Strophe.Status.AUTHFAIL;
+Connection.CONNFAIL = Strophe.Status.CONNFAIL;
