@@ -1,5 +1,5 @@
 
-var Connection = BugSwarm.Connection = function(fn, config) {
+var Connection = BugSwarm.Connection = function(config) {
   /**
   * Object used to return functions that will be
   * public
@@ -23,6 +23,8 @@ var Connection = BugSwarm.Connection = function(fn, config) {
 
   var barejid;
   
+  var disconnectCallback;
+
 
   /**
   * @type Strophe.Connection
@@ -51,12 +53,26 @@ var Connection = BugSwarm.Connection = function(fn, config) {
   * @api public
   */
 
-  my.connect = function (username, password) {
+  my.connect = function (username, password, fn) {
     var callback = fn || function(){};
 
     xmppsrv.connect(username, password, function(status, error) {
-      var debug = config.debug;  
+      var debug = config.debug;
 
+      if(status == Strophe.Status.CONNECTED) {
+         //sending presence
+          xmppsrv.send($pres({xmlns:Strophe.NS.CLIENT}).tree());
+
+          barejid = Strophe.getBareJidFromJid(username);
+          callback(status);
+      } else if( status == Strophe.Status.ERROR ||
+                 status == Strophe.Status.AUTHFAIL) {
+          callback(status, error);
+      } else if( status == Strophe.Status.DISCONNECTED) {
+        disconnectCallback(status, error);
+      }
+           
+      /*
       switch(status) {
         case Strophe.Status.CONNECTING:
           debug && console.log('Connecting to ' + config.url + '...');
@@ -75,7 +91,7 @@ var Connection = BugSwarm.Connection = function(fn, config) {
           barejid = Strophe.getBareJidFromJid(username);
 
           debug && console.log('Connected');
-          callback(status);
+          callback(status, error);
           break;
 
         case Strophe.Status.AUTHENTICATING:
@@ -90,7 +106,7 @@ var Connection = BugSwarm.Connection = function(fn, config) {
 
         case Strophe.Status.ATTACHED:
           break;
-      }
+      } */
     });
   };
 
@@ -101,7 +117,9 @@ var Connection = BugSwarm.Connection = function(fn, config) {
   * @api private
   */
   
-  my.disconnect = function() {
+  my.disconnect = function(fn) {
+    disconnectCallback = fn || function() {};
+    
     xmppsrv.disconnect();
   };
 

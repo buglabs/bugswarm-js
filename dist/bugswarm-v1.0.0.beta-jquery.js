@@ -12070,7 +12070,7 @@ var Config = BugSwarm.Config = {
 };
 
 
-var Connection = BugSwarm.Connection = function(fn, config) {
+var Connection = BugSwarm.Connection = function(config) {
   /**
   * Object used to return functions that will be
   * public
@@ -12094,6 +12094,8 @@ var Connection = BugSwarm.Connection = function(fn, config) {
 
   var barejid;
   
+  var disconnectCallback;
+
 
   /**
   * @type Strophe.Connection
@@ -12122,12 +12124,26 @@ var Connection = BugSwarm.Connection = function(fn, config) {
   * @api public
   */
 
-  my.connect = function (username, password) {
+  my.connect = function (username, password, fn) {
     var callback = fn || function(){};
 
     xmppsrv.connect(username, password, function(status, error) {
-      var debug = config.debug;  
+      var debug = config.debug;
 
+      if(status == Strophe.Status.CONNECTED) {
+         //sending presence
+          xmppsrv.send($pres({xmlns:Strophe.NS.CLIENT}).tree());
+
+          barejid = Strophe.getBareJidFromJid(username);
+          callback(status);
+      } else if( status == Strophe.Status.ERROR ||
+                 status == Strophe.Status.AUTHFAIL) {
+          callback(status, error);
+      } else if( status == Strophe.Status.DISCONNECTED) {
+        disconnectCallback(status, error);
+      }
+           
+      /*
       switch(status) {
         case Strophe.Status.CONNECTING:
           debug && console.log('Connecting to ' + config.url + '...');
@@ -12146,7 +12162,7 @@ var Connection = BugSwarm.Connection = function(fn, config) {
           barejid = Strophe.getBareJidFromJid(username);
 
           debug && console.log('Connected');
-          callback(status);
+          callback(status, error);
           break;
 
         case Strophe.Status.AUTHENTICATING:
@@ -12161,7 +12177,7 @@ var Connection = BugSwarm.Connection = function(fn, config) {
 
         case Strophe.Status.ATTACHED:
           break;
-      }
+      } */
     });
   };
 
@@ -12172,7 +12188,9 @@ var Connection = BugSwarm.Connection = function(fn, config) {
   * @api private
   */
   
-  my.disconnect = function() {
+  my.disconnect = function(fn) {
+    disconnectCallback = fn || function() {};
+    
     xmppsrv.disconnect();
   };
 
@@ -12196,7 +12214,11 @@ var Connection = BugSwarm.Connection = function(fn, config) {
 };
 
 
-var Session = BugSwarm.Session = function(fn, cfg) {
+//TODO
+// get the sha1 hash from the password and assign this hash to the class
+// variable "password"
+
+var Session = BugSwarm.Session = function(username, password, cfg) {
   /**
   * Object used to return functions that will be
   * public
@@ -12208,6 +12230,8 @@ var Session = BugSwarm.Session = function(fn, cfg) {
   */
   
   var my = {};
+  
+  //password = sha1(password);
 
   /** 
   * Merging internal configurations with the public ones
@@ -12220,7 +12244,7 @@ var Session = BugSwarm.Session = function(fn, cfg) {
   var config = $.extend(true, {}, cfg, internalcfg);
 
 
-  var conn = new BugSwarm.Connection(fn, config);
+  var conn = new BugSwarm.Connection(config);
 
   /**
   * Starts the session with the server
@@ -12231,7 +12255,7 @@ var Session = BugSwarm.Session = function(fn, cfg) {
   * @api 
   */
 
-  my.start = function(username, password) {
+  my.start = function(fn) {
     var resource = config.resource;
     var url = config.url;
     var version = config.version;
@@ -12245,7 +12269,7 @@ var Session = BugSwarm.Session = function(fn, cfg) {
       jid += '/' + resource + '-jsapi-' + version;
     }
 
-    conn.connect(jid, password);
+    conn.connect(jid, password, fn);
   };
 
   /**
@@ -12254,12 +12278,10 @@ var Session = BugSwarm.Session = function(fn, cfg) {
   * @api public
   */ 
 
-  my.end = function() {
-    conn.disconnect();
+  my.end = function(fn) {
+    conn.disconnect(fn);
   };
   
-  
-
   my.barejid = function() {
     return conn.barejid();
   };
