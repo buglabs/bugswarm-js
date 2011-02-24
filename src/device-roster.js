@@ -1,4 +1,3 @@
-
 var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
  /**
   * Object used to return functions that will be
@@ -65,7 +64,7 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   * Devices callback
   * It gets call when the server send 
   * the list of devices that are part
-  * of the user's roster weather 
+  * of the user's roster whether 
   * they are online or not.
   *  
   * @api private
