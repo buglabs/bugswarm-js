@@ -53,7 +53,7 @@ var Connection = BugSwarm.Connection = function(config) {
   * @api private
   */
 
-  var xmppsrv = new Strophe.Connection(config.url);
+  var xmppsrv = new Strophe.Connection(config.xmpp_service);
 
   /**
   * Connection life cycle states

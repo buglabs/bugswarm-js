@@ -12124,7 +12124,7 @@ var Connection = BugSwarm.Connection = function(config) {
   * @api private
   */
 
-  var xmppsrv = new Strophe.Connection(config.url);
+  var xmppsrv = new Strophe.Connection(config.xmpp_service);
 
   /**
   * Connection life cycle states
@@ -12295,7 +12295,8 @@ var Session = BugSwarm.Session = function(username, password, cfg) {
   /** 
   * Merging internal configurations with the public ones
   */
-  var internalcfg = { url: 'xmpp.bugswarm.net',
+  var internalcfg = { xmpp_service: 'http://bugswarm.net/bosh',
+		      domain: 'xmpp.bugswarm.net',
                       swarmsrv: 'swarms.xmpp.bugswarm.net',
                       resource: 'web',
                       version: '1.0.0'
@@ -12316,14 +12317,14 @@ var Session = BugSwarm.Session = function(username, password, cfg) {
 
   my.start = function(fn) {
     var resource = config.resource;
-    var url = config.url;
+    var domain = config.domain;
     var version = config.version;
         
     if(!username || !password) {
       throw new Error("You must provide the user and password to log in to bugswarm.");
     }
 
-    var jid = username + '@' + url;
+    var jid = username + '@' + domain;
     if(resource) {
       jid += '/' + resource + '-jsapi-' + version;
     }
@@ -12404,7 +12405,6 @@ var DeviceModel = BugSwarm.DeviceModel = function() {
   return my;
 };
 
-
 var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
  /**
   * Object used to return functions that will be
@@ -12471,7 +12471,7 @@ var DeviceRoster = BugSwarm.DeviceRoster = function(session) {
   * Devices callback
   * It gets call when the server send 
   * the list of devices that are part
-  * of the user's roster weather 
+  * of the user's roster whether 
   * they are online or not.
   *  
   * @api private
