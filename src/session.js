@@ -52,7 +52,7 @@ var Session = BugSwarm.Session = function(username, password, cfg) {
 
     var jid = username + '@' + domain;
     if(resource) {
-      jid += '/' + resource + '-jsapi-' + version;
+      jid += '/' + resource;
     }
 
     conn.connect(jid, password, fn);
