@@ -6,8 +6,39 @@
  * @author Bug Labs Inc.
  **/
 (function(exports, io) {
-    if (!io || !io.connect) {
+    if (!io || ! io.connect) {
         throw new Error('No socket.io detected');
+    }
+
+    /**
+     * Makes sure that .bind exists (ES5)
+     **/
+    if (!Function.prototype.bind) {
+        Function.prototype.bind = function(oThis) {
+
+            //closest thing possible to the ECMAScript 5
+            //internal IsCallable function
+            if (typeof this !== 'function') {
+                throw new TypeError('Function.prototype.bind ' +
+                '- what is trying to be fBound is not callable');
+            }
+            var aArgs = Array.prototype.slice.call(arguments, 1),
+            fToBind = this,
+            fNOP = function() {},
+            fBound = function() {
+                return fToBind.apply(
+                    this instanceof fNOP ? this : oThis || window,
+                    aArgs.concat(Array.prototype.slice.call(arguments))
+                );
+            };
+
+            fNOP.prototype = this.prototype;
+            fBound.prototype = new fNOP();
+
+            return fBound;
+
+        };
+
     }
 
     /**
@@ -65,7 +96,7 @@
             //since we are going to have a cluster of federated servers.
             if (stanza.presence) {
                 stanza.presence.to = swarms[i] + '@' +
-                                    this.swarmsrv + '/' + this.nickname;
+                this.swarmsrv + '/' + this.nickname;
             } else if (stanza.message) {
                 stanza.message.to = swarms[i] + '@' + this.swarmsrv;
             }
@@ -94,7 +125,7 @@
 
         socket.on('connected to backend', function() {
             self.nickname = 'browser-' +
-                            (Math.random() + '' + Date.now()).split('.')[1];
+            (Math.random() + '' + Date.now()).split('.')[1];
             //self.server = server;
             self.swarmsrv = 'swarms.xmpp.bugswarm-dev'; //FIXME
             self.online = true;
@@ -131,9 +162,7 @@
             'you need to provide a function callback');
         }
 
-
         this.apikey = options.apikey;
-
 
         function _join() {
             var self = this;
