@@ -92,8 +92,6 @@
 
         var len = swarms.length;
         for (var i = 0; i < len; i++) {
-            //TODO we should append the server
-            //since we are going to have a cluster of federated servers.
             if (stanza.presence) {
                 stanza.presence.to = swarms[i] + '@' +
                 this.swarmsrv + '/' + this.nickname;
@@ -113,7 +111,7 @@
     function connect(callback) {
         var self = this;
 
-        var socket = io.connect('http://api.bugswarm-dev'); //FIXME
+        var socket = io.connect('http://api.bugswarm-dev');
         socket.on('connect', function() {
             socket.emit('apikey', self.apikey);
         });
@@ -123,11 +121,12 @@
             console.log('disconnected');
         });
 
-        socket.on('connected to backend', function() {
+        socket.on('connected to backend', function(server) {
             self.nickname = 'browser-' +
             (Math.random() + '' + Date.now()).split('.')[1];
             //self.server = server;
-            self.swarmsrv = 'swarms.xmpp.bugswarm-dev'; //FIXME
+            self.server = server || 'xmpp.bugswarm-dev';
+            self.swarmsrv = 'swarms.' + self.server;
             self.online = true;
 
             callback.call(self);

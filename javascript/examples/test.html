@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <script src="../dist/swarm-v1.0.0.beta.js"></script>
+    </head>
+    <body>
+        <script>
+            var socket = io.connect('http://api.bugswarm.net');
+            socket.on('connect', function () {
+                //consumer key
+                var apikey = 'a7b2f5f3a96a99ace62dcab95368f91e86d13474';
+                socket.emit('apikey', apikey);
+		        console.log('socket.io connected');
+            });
+
+            socket.on('message', function (message) {
+                console.log(Date.now() + ': ' + JSON.stringify(message));
+            });
+
+            socket.on('connected to backend', function() {
+                console.log('connected to ejabberd');
+                var nick = Math.random() + '' + Date.now();
+                socket.emit('message', { 
+                    presence: {
+                        to: 'c6f3218884763119848054f340b832eb19d59752@swarms.xmpp.bugswarm-dev/browser-' + nick}
+                });
+            });
+
+            socket.on('disconnect', function() {
+                console.log('disconnected');
+            });
+
+            socket.on('error', function(error) {
+                console.log('ERROR: ' + JSON.stringify(error));
+            });
+        </script>
+    </body>
+</html>

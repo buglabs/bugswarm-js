@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <script src="../dist/swarm-v1.0.0.beta.js"></script>
+    </head>
+    <body>
+        <script>
+            SWARM.join({apikey: 'a7b2f5f3a96a99ace62dcab95368f91e86d13474', 
+                        swarms: 'c6f3218884763119848054f340b832eb19d59752',
+                        callback: function(message) {
+                            console.log(Date.now() + ': ' + JSON.stringify(message)); 
+                        }
+            });
+        </script>
+    </body>
+</html>
