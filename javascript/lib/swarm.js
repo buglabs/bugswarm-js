@@ -111,7 +111,7 @@
     function connect(callback) {
         var self = this;
 
-        var socket = io.connect('http://api.bugswarm-dev');
+        var socket = io.connect('http://@@API_SERVER@@');
         socket.on('connect', function() {
             socket.emit('apikey', self.apikey);
         });
@@ -125,7 +125,7 @@
             self.nickname = 'browser-' +
             (Math.random() + '' + Date.now()).split('.')[1];
             //self.server = server;
-            self.server = server || 'xmpp.bugswarm-dev';
+            self.server = server || '@@XMPP_SERVER@@';
             self.swarmsrv = 'swarms.' + self.server;
             self.online = true;
 

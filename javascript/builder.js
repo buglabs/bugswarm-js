@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 
 /**
  * Builder for Swarm Client Javascript Library. 
@@ -13,138 +13,209 @@ path = require('path');
 
 /* Configuration */
 var config = {
-    name: 'swarm',
-    srcpath: 'lib',
-    socketio_base: 'node_modules/socket.io-client/dist/',
-    socketio_file: 'socket.io.js',
-    socketio_cd: 'crossdomain.xml',
-    socketio_swf: ['WebSocketMain.swf', 'WebSocketMainInsecure.swf'],
-    distdir: 'dist',
-    combine: ['swarm.js'],
-    version: {
-        major: '1',
-        minor: '0',
-        micro: '0',
-        qualifier: 'beta'
-    },
+	name: 'swarm',
+	srcpath: 'lib',
+	socketio_base: 'node_modules/socket.io-client/dist/',
+	socketio_file: 'socket.io.js',
+	socketio_cd: 'crossdomain.xml',
+	socketio_swf: ['WebSocketMain.swf', 'WebSocketMainInsecure.swf'],
+	distdir: 'dist',
+	combine: ['swarm.js'],
+	version: {
+		major: '1',
+		minor: '0',
+		micro: '0',
+		qualifier: 'beta'
+	},
+	servers: [ //development
+		{   'env': 'dev',
+			'api': 'api.bugswarm-dev',
+			'xmpp': 'xmpp.bugswarm-dev'
+		},
+		{ //integration
+            'env': 'int',
+			'api': 'api.bugswarm-int',
+			'xmpp': 'xmpp.bugswarm-int'
+		}, 
+		{ //test
+            'env': 'test',
+			'api': 'api.bugswarm-test',
+			'xmpp': 'xmpp.bugswarm-test'
+		},
+		{ //stage
+            'env': 'stage',
+			'api': 'api.bugswarm-stage',
+			'xmpp': 'xmpp.bugswarm-stage'
+		},
+		{ //production
+            'env': 'prod',
+			'api': 'api.bugswarm.net',
+			'xmpp': 'bugswarm.net'
+		}
+	]
 };
 
 //Utility functions
 function copy(src, dst) {
-    if (!path.existsSync(src)) {
-        throw new Error(src + ' does not exists. Nothing to be copied');
-    }
+	if (!path.existsSync(src)) {
+		throw new Error(src + ' does not exists. Nothing to be copied');
+	}
 
-    if (fs.statSync(src).isDirectory()) {
-        throw new Error(src + ' is a directory. It must be a file');
-    }
+	if (fs.statSync(src).isDirectory()) {
+		throw new Error(src + ' is a directory. It must be a file');
+	}
 
-    if (src == dst) {
-        throw new Error(src + ' and ' + dst + 'are identical');
-    }
+	if (src == dst) {
+		throw new Error(src + ' and ' + dst + 'are identical');
+	}
 
-    var infd = fs.openSync(src, 'r');
-    var size = fs.fstatSync(infd).size;
-    var outfd = fs.openSync(dst, 'w');
+	var infd = fs.openSync(src, 'r');
+	var size = fs.fstatSync(infd).size;
+	var outfd = fs.openSync(dst, 'w');
 
-    fs.sendfileSync(outfd, infd, 0, size);
+	fs.sendfileSync(outfd, infd, 0, size);
 
-    fs.closeSync(infd);
-    fs.closeSync(outfd);
+	fs.closeSync(infd);
+	fs.closeSync(outfd);
 }
 
 function copytree(src, dst) {
-    if (!path.existsSync(src)) {
-        throw new Error(src + ' does not exists. Nothing to be copied');
-    }
+	if (!path.existsSync(src)) {
+		throw new Error(src + ' does not exists. Nothing to be copied');
+	}
 
-    if (!fs.statSync(src).isDirectory()) {
-        throw new Error(src + ' must be a directory');
-    }
+	if (!fs.statSync(src).isDirectory()) {
+		throw new Error(src + ' must be a directory');
+	}
 
-    var filenames = fs.readdirSync(src);
-    var basedir = src;
+	var filenames = fs.readdirSync(src);
+	var basedir = src;
 
-    if (!path.existsSync(dst)) {
-        fs.mkdirSync(dst, 0755);
+	if (!path.existsSync(dst)) {
+		fs.mkdirSync(dst, 0755);
+	}
+
+	for (var name in filenames) {
+		var file = basedir + '/' + filenames[name];
+		var newdst = dst + '/' + filenames[name];
+
+		if (fs.statSync(file).isDirectory()) {
+			copytree(file, newdst);
+		} else {
+			copy(file, newdst);
+		}
+	}
+};
+
+var rlevel = 0;
+var root;
+function rmtree(_path) {
+    if (fs.statSync(_path).isFile()) {
+        throw new Error(_path + ' is a file. Use fs.unlink instead');
     }
+    if (!root) {
+        root = _path;
+    }
+    var filenames = fs.readdirSync(_path);
+    var basedir = _path;
 
     for (var name in filenames) {
         var file = basedir + '/' + filenames[name];
-        var newdst = dst + '/' + filenames[name];
 
         if (fs.statSync(file).isDirectory()) {
-            copytree(file, newdst);
+            rlevel++;
+            rmtree(file);
+            rlevel--;
+
+            fs.rmdirSync(file);
         } else {
-            copy(file, newdst);
+            fs.unlinkSync(file);
         }
+    }
+
+    if (rlevel === 0 && path.existsSync(root)) {
+        fs.rmdirSync(root);
     }
 };
 
 function combine() {
-    var api = '';
-    var files = config.combine;
-    var srcpath = config.srcpath;
-    var distdir = config.distdir;
+	var api = '';
+	var files = config.combine;
+	var srcpath = config.srcpath;
+	var distdir = config.distdir;
 
-    for (var file in files) {
-        api += '\n';
-        api += fs.readFileSync(srcpath + '/' + files[file]);
-    }
+	for (var file in files) {
+		api += '\n';
+		api += fs.readFileSync(srcpath + '/' + files[file]);
+	}
 
-    var socketio = fs.readFileSync(config.socketio_base + '/' + config.socketio_file);
+	var socketio = fs.readFileSync(config.socketio_base + '/' + config.socketio_file);
 
-    if (!path.existsSync(distdir)) {
-        fs.mkdirSync(distdir, 0755);
-    }
+	if (!path.existsSync(distdir)) {
+		fs.mkdirSync(distdir, 0755);
+	}
 
-    var release = socketio + '\n' + api;
-    return release;
+	var release = socketio + '\n' + api;
+	return release;
 }
 
 function minimize(code) {
-    //uglify hate unicode chars...
-    var separator = '@@OMGYUCHANGEME@@@';
-    code = code.replace(/(\\ufffd)/g, separator);
+	//uglify hate unicode chars...
+	var separator = '@@OMGYUCHANGEME@@@';
+	code = code.replace(/(\\ufffd)/g, separator);
 
-    var ast = uglify.parser.parse(code);
-    ast = uglify.uglify.ast_mangle(ast);
-    ast = uglify.uglify.ast_squeeze(ast);
+	var ast = uglify.parser.parse(code);
+	ast = uglify.uglify.ast_mangle(ast);
+	ast = uglify.uglify.ast_squeeze(ast);
 
-    code = uglify.uglify.gen_code(ast);
+	code = uglify.uglify.gen_code(ast);
 
-    // restore the code
-    code = code.replace(new RegExp('('+ separator + ')', 'g'), '\\ufffd');
-    
-    return code;
+	// restore the code
+	code = code.replace(new RegExp('(' + separator + ')', 'g'), '\\ufffd');
+
+	return code;
 }
 
-// Builder Class
+// Builder
 function Builder() {};
 
 Builder.prototype.dist = function() {
-    var version = config.version;
-    var release = combine();
-    var release_min = minimize(release);
+	var version = config.version;
+	var release = combine();
+	
+	var name = config.name;
+    name += '-v' + version.major + '.' + version.minor +
+            '.' + version.micro + '.' + version.qualifier;
 
-    var name = config.name;
-    var distdir = config.distdir;
+	var distdir = config.distdir;
 
-    name += '-v' + version.major + 
-            '.' + version.minor + 
-            '.' + version.micro + 
-            '.' + version.qualifier;
+    rmtree('./' + distdir);
+    fs.mkdirSync('./' + distdir, 0755);
 
-    fs.writeFileSync(distdir + '/' + name + '.js', release);
-    fs.writeFileSync(distdir + '/' + name + '.min.js', release_min);
+    var servers = config.servers;
+    var len = servers.length;
+    for(var i = 0; i < len; i++) {
+        var _release = release.replace(/@@API_SERVER@@/ig, servers[i].api);
+        _release = _release.replace(/@@XMPP_SERVER@@/ig, servers[i].xmpp);
 
-    for (var file in config.socketio_swf) {
-        var src = config.socketio_base + '/' + config.socketio_swf[file];
-        var dst = config.distdir + '/' + config.socketio_swf[file];
-        copy(src, dst);
+        var release_min = minimize(_release);
+        
+        var envdir = distdir + '/' + servers[i].env;
+        if(!path.existsSync(envdir)) {
+            fs.mkdirSync(envdir, 0755);
+        }
+    
+	    fs.writeFileSync(envdir + '/' + name + '.js', _release);
+	    fs.writeFileSync(envdir + '/' + name + '.min.js', release_min);
+
+        for (var file in config.socketio_swf) {
+		    var src = config.socketio_base + '/' + config.socketio_swf[file];
+		    var dst = envdir + '/' + config.socketio_swf[file];
+		    copy(src, dst);
+	    }
+
+	    copy(config.srcpath + '/' + config.socketio_cd, envdir + '/' + config.socketio_cd);
     }
-
-    copy(config.srcpath + '/' + config.socketio_cd, config.distdir + '/' + config.socketio_cd);
 };
 
 /**
@@ -158,11 +229,11 @@ var args = process.argv.slice(2);
  */
 
 var usage = '' + 
-    '\x1b[1mUsage\x1b[0m: ./builder [task]\n' + 
-    '\n' + 
-    '\x1b[1mTasks:\x1b[0m\n' + 
-    '  help  Print out instructions to use the builder\n' + 
-    '  dist  Generates distributable version\n' + 
+    '\x1b[1mUsage\x1b[0m: ./builder [task]\n' +
+    '\n' +
+    '\x1b[1mTasks:\x1b[0m\n' +
+    '  help  Print out instructions to use the builder\n' +
+    '  dist  Generates distributable version\n' +
     '  jslint Runs JSlint to verify the code\n';
 
 // Parse arguments
@@ -170,24 +241,25 @@ var arg;
 var builder = new Builder();
 var alength = args.length;
 if (!alength) {
-    sys.puts(usage);
-    process.exit(1);
+	sys.puts(usage);
+	process.exit(1);
 }
 
 while (args.length) {
-    arg = args.shift();
-    switch (arg) {
-    case 'help':
-        sys.puts(usage);
-        process.exit(1);
-        break;
-    case 'dist':
-        builder.dist();
-        break;
-    case 'jslint':
-        builder.doc();
-        break;
-    default:
-        sys.puts(usage);
-    }
+	arg = args.shift();
+	switch (arg) {
+	case 'help':
+		sys.puts(usage);
+		process.exit(1);
+		break;
+	case 'dist':
+		builder.dist();
+		break;
+	case 'jslint':
+		builder.doc();
+		break;
+	default:
+		sys.puts(usage);
+	}
 }
+
