@@ -3703,7 +3703,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     }
 
     /**
-     * Makes sure that .bind exists (ES5)
+     * Makes sure .bind exists (ES5)
      **/
     if (!Function.prototype.bind) {
         Function.prototype.bind = function(oThis) {
@@ -3734,7 +3734,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     }
 
     /**
-     * Makes sure that Array.isArray exists. (ES5)
+     * Makes sure Array.isArray exists. (ES5)
      **/
     if (!Array.isArray) {
         Array.isArray = (function() {
@@ -3803,7 +3803,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     function connect(callback) {
         var self = this;
 
-        var socket = io.connect('http://api.bugswarm-dev');
+        var socket = io.connect('http://api.bugswarm-dev:80');
         socket.on('connect', function() {
             socket.emit('apikey', self.apikey);
         });
@@ -3857,9 +3857,10 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
         function _join() {
             var self = this;
-            var swarms = options.swarms;
-            if (!Array.isArray(swarms)) {
-                this.swarms = [swarms];
+            this.swarms = options.swarms;
+
+            if (!Array.isArray(this.swarms)) {
+                this.swarms = [this.swarms];
             }
 
             send.call(this, {

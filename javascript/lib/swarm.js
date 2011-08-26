@@ -166,7 +166,7 @@
         function _join() {
             var self = this;
             this.swarms = options.swarms;
-            
+
             if (!Array.isArray(this.swarms)) {
                 this.swarms = [this.swarms];
             }
