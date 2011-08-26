@@ -11,7 +11,7 @@
     }
 
     /**
-     * Makes sure that .bind exists (ES5)
+     * Makes sure .bind exists (ES5)
      **/
     if (!Function.prototype.bind) {
         Function.prototype.bind = function(oThis) {
@@ -42,7 +42,7 @@
     }
 
     /**
-     * Makes sure that Array.isArray exists. (ES5)
+     * Makes sure Array.isArray exists. (ES5)
      **/
     if (!Array.isArray) {
         Array.isArray = (function() {
@@ -111,7 +111,7 @@
     function connect(callback) {
         var self = this;
 
-        var socket = io.connect('http://@@API_SERVER@@');
+        var socket = io.connect('http://@@API_SERVER@@:80');
         socket.on('connect', function() {
             socket.emit('apikey', self.apikey);
         });
@@ -165,9 +165,10 @@
 
         function _join() {
             var self = this;
-            var swarms = options.swarms;
-            if (!Array.isArray(swarms)) {
-                this.swarms = [swarms];
+            this.swarms = options.swarms;
+            
+            if (!Array.isArray(this.swarms)) {
+                this.swarms = [this.swarms];
             }
 
             send.call(this, {
