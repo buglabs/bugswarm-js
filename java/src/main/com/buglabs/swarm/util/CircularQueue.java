@@ -1,33 +1,36 @@
 package com.buglabs.swarm.util;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReferenceArray;
+
 public class CircularQueue<T> {
 	private int qMaxSize;// max queue size
-	private int fp = 0; // front pointer
-	private int rp = 0; // rear pointer
-	private int qs = 0; // size of queue
-	private T[] queue; // actual queue
+	private AtomicInteger fp; // front pointer
+	private AtomicInteger rp; // rear pointer
+	private AtomicInteger qs; // size of queue
+	private AtomicReferenceArray<T> queue; // actual queue
 
 	public CircularQueue(int size) {
 		qMaxSize = size;
-		fp = 0;
-		rp = 0;
-		qs = 0;
-		queue = (T[]) new Object[qMaxSize];
+		fp = new AtomicInteger();
+		rp = new AtomicInteger();
+		qs = new AtomicInteger();
+		queue = new AtomicReferenceArray<T>(qMaxSize);
 	}
 
 	public T remove() {
-		qs--;
-		fp = (fp + 1) % qMaxSize;
-		return queue[fp];
+		qs.decrementAndGet();
+		fp.set((fp.get() + 1) % qMaxSize);
+		return queue.get(fp.intValue());
 	}
 
 	public void add(T item) {
-		qs++;
-		rp = (rp + 1) % qMaxSize;
-		queue[rp] = item;
+		qs.incrementAndGet();
+		rp.set((rp.get() + 1) % qMaxSize);
+		queue.set(rp.intValue(), item);
 	}
 
 	public boolean isEmpty() {
-		return qs == 0;
+		return qs.intValue() == 0;
 	}
 }
