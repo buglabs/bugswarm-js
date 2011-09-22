@@ -3690,6 +3690,60 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 );
 
 
+if (!Function.prototype.bind) {
+    /**
+     * Makes sure .bind exists (ES5)
+     * @return {Object} blah.
+     * @param {Object} oThis blah.
+     **/
+    Function.prototype.bind = function(oThis) {
+        //closest thing possible to the ECMAScript 5
+        //internal IsCallable function
+        if (typeof this !== 'function') {
+            throw new TypeError('Function.prototype.bind ' +
+            '- what is trying to be fBound is not callable');
+        }
+        var aArgs = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP = function() {},
+        fBound = function() {
+            return fToBind.apply(
+            this instanceof fNOP ? this : oThis || window,
+            aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+
+        return fBound;
+    };
+}
+
+if (!Array.isArray) {
+    /**
+     * Makes sure Array.isArray exists. (ES5)
+     **/
+    Array.isArray = (function() {
+        // save a reference built-in Object.prototype.toString
+        var builtInToString = Object.prototype.toString;
+
+        // save a reference to built-in Function.prototype.call
+        var builtInToCall = Function.prototype.call;
+
+        // requires a built-in bind function, not a shim
+        var callWithArgs = builtInToCall.bind(builtInToCall);
+
+        var argToString = function(o) {
+            return callWithArgs(builtInToString, o);
+        };
+
+        return function(o) {
+            return argToString(o) === '[object Array]';
+        };
+    })();
+}
+
+
 /**
  * @fileoverview This is the Javascript client for Swarm platform,
  * it provides the behavior to join and leave swarms as well as send and
@@ -3698,63 +3752,8 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
  * @author Bug Labs Inc.
  **/
 (function(exports, io) {
-    if (!io || ! io.connect) {
+    if (!io || !io.connect) {
         throw new Error('No socket.io detected');
-    }
-
-    /**
-     * Makes sure .bind exists (ES5)
-     **/
-    if (!Function.prototype.bind) {
-        Function.prototype.bind = function(oThis) {
-
-            //closest thing possible to the ECMAScript 5
-            //internal IsCallable function
-            if (typeof this !== 'function') {
-                throw new TypeError('Function.prototype.bind ' +
-                '- what is trying to be fBound is not callable');
-            }
-            var aArgs = Array.prototype.slice.call(arguments, 1),
-            fToBind = this,
-            fNOP = function() {},
-            fBound = function() {
-                return fToBind.apply(
-                    this instanceof fNOP ? this : oThis || window,
-                    aArgs.concat(Array.prototype.slice.call(arguments))
-                );
-            };
-
-            fNOP.prototype = this.prototype;
-            fBound.prototype = new fNOP();
-
-            return fBound;
-
-        };
-
-    }
-
-    /**
-     * Makes sure Array.isArray exists. (ES5)
-     **/
-    if (!Array.isArray) {
-        Array.isArray = (function() {
-            // save a reference built-in Object.prototype.toString
-            var builtInToString = Object.prototype.toString;
-
-            // save a reference to built-in Function.prototype.call
-            var builtInToCall = Function.prototype.call;
-
-            // requires a built-in bind function, not a shim
-            var callWithArgs = builtInToCall.bind(builtInToCall);
-
-            var argToString = function(o) {
-                return callWithArgs(builtInToString, o);
-            };
-
-            return function(o) {
-                return argToString(o) === '[object Array]';
-            };
-        })();
     }
 
     /**
@@ -3767,6 +3766,27 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     };
 
     /**
+     * Clones an object.
+     * @param {Object} obj The object to be copied.
+     * @return {Object} The copy of the object.
+     **/
+
+    function clone(obj) {
+        if (obj == null ||
+            typeof(obj) != 'object') {
+            return obj;
+        }
+
+        var copy = new obj.constructor();
+
+        for (var key in obj) {
+            copy[key] = clone(obj[key]);
+        }
+        return copy;
+    }
+
+
+    /**
      * Sends messages to every joined swarm or a subset of them.
      * @param {Object} stanza A javascript object representing the stanza.
      * @param {Array} _swarms An array of a selected group
@@ -3775,6 +3795,8 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
      * @private
      **/
     function send(stanza, _swarms) {
+        var self = this;
+
         var swarms = [];
         if (_swarms) {
             swarms = _swarms;
@@ -3784,13 +3806,15 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
         var len = swarms.length;
         for (var i = 0; i < len; i++) {
-            if (stanza.presence) {
-                stanza.presence.to = swarms[i] + '@' +
-                this.swarmsrv + '/' + this.nickname;
-            } else if (stanza.message) {
-                stanza.message.to = swarms[i] + '@' + this.swarmsrv;
+            var _stanza = clone(stanza);
+            if (_stanza.presence) {
+                _stanza.presence.to = swarms[i] + '@' +
+                self.swarmsrv + '/' + self.nickname;
+            } else if (_stanza.message) {
+                _stanza.message.to = swarms[i] + '@' + self.swarmsrv;
             }
-            this.socket.emit('message', stanza);
+            console.log('Sending ' + JSON.stringify(_stanza));
+            self.socket.emit('message', _stanza);
         }
     }
 
@@ -3856,24 +3880,23 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
         this.apikey = options.apikey;
 
         function _join() {
-            var self = this;
-            this.swarms = options.swarms;
+            self.swarms = options.swarms;
 
-            if (!Array.isArray(this.swarms)) {
-                this.swarms = [this.swarms];
+            if (!Array.isArray(self.swarms)) {
+                self.swarms = [self.swarms];
             }
 
-            send.call(this, {
+            send.call(self, {
                 presence: {}
             });
         }
 
         if (!this.online) {
             connect.call(this, function() {
-                _join.call(self);
+                _join();
             });
         } else {
-            _join.call(this);
+            _join();
         }
 
         this.socket.on('message', options.callback);
@@ -3896,17 +3919,17 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
         swarms);
 
         if (swarms) {
-            var len = self.swarms.length;
+            var len = this.swarms.length;
             for (var i = 0; i < len; i++) {
                 var len_ = swarms.length;
                 for (var j = 0; j < len_; j++) {
-                    if (self.swarms[i] == swarms[j]) {
-                        self.swarms.splice(i, 1);
+                    if (this.swarms[i] == swarms[j]) {
+                        this.swarms.splice(i, 1);
                     }
                 }
             }
         } else {
-            self.swarms = [];
+            this.swarms = [];
         }
     };
 
@@ -3916,8 +3939,9 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
         }
         var stanza = {
             message: {
+                to: '', //workaround for json2xml converter
                 type: 'groupchat',
-                body: payload
+                body: { $t: payload }
             }
         };
         send.call(this, stanza);

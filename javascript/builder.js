@@ -20,7 +20,7 @@ var config = {
 	socketio_cd: 'crossdomain.xml',
 	socketio_swf: ['WebSocketMain.swf', 'WebSocketMainInsecure.swf'],
 	distdir: 'dist',
-	combine: ['swarm.js'],
+	combine: ['util.js', 'swarm.js'],
 	version: {
 		major: '1',
 		minor: '0',
@@ -144,10 +144,11 @@ function combine() {
 	var srcpath = config.srcpath;
 	var distdir = config.distdir;
 
-	for (var file in files) {
-		api += '\n';
-		api += fs.readFileSync(srcpath + '/' + files[file]);
-	}
+    var len = files.length;
+    for (var i = 0; i < len; i++) {
+        api += '\n';
+        api += fs.readFileSync(srcpath + '/' + files[i]);
+    }
 
 	var socketio = fs.readFileSync(config.socketio_base + '/' + config.socketio_file);
 

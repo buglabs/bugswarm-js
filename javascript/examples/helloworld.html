@@ -1,25 +1,40 @@
 <html>
     <head>
-        <script src="http://cdn.buglabs.net/swarm/swarm-v1.0.0.beta.js"></script>
+        <!--<script src="http://cdn.buglabs.net/swarm/swarm-v1.0.0.beta.js"></script>
+        <script src="http://cdn.buglabs.net/swarm/swarm-v1.0.0.beta.min.js"></script> -->
+        
         <!-- BugLabs deployment environments (internal use only) -->
-        <!-- 
-        <script src="../dist/dev/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/int/swarm-v1.0.0.beta.js"></script>
+        <!-- <script src="../dist/dev/swarm-v1.0.0.beta.js"></script> -->
+        <!-- <script src="../dist/int/swarm-v1.0.0.beta.js"></script>
         <script src="../dist/test/swarm-v1.0.0.beta.js"></script>
         <script src="../dist/stage/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/prod/swarm-v1.0.0.beta.js"></script>
-         -->
+        --><script src="../dist/prod/swarm-v1.0.0.beta.js"></script>
+         
     </head>
     <body>
         <script>
-            /* just open this file twice or more and you should be able 
-                to see presence in the developer console. */
-            SWARM.join({apikey: 'a7b2f5f3a96a99ace62dcab95368f91e86d13474', 
-                        swarms: 'c6f3218884763119848054f340b832eb19d59752',
+            /* Open this file twice or more and you should be able 
+                to see presence in the developer console of your browser. */
+            SWARM.join({apikey: 'cdb56c7dd912dab4c2f30a30a87b7bcfa2b34091', 
+                        swarms: ['db438ef12c1c79f97a7d13fdddc12e3fe3245440', 
+                                 '660e96311f5ca4c39053726d2d0c81f2661a8ef3'
+                                 /*'B23412342134234134', 
+                                 'A02347223890470129347843', 
+                                 'F239471239047120394871234890723109487', 
+                                 'P982374123471902347123904781240', 
+                                 'C12341234123412341234123412341324',
+                                 'K123412341234123413412343443141423',
+                                 'L243134123423414234', 
+                                 'M2341234KJAS234',
+                                 'N1234124123412341234',
+                                 'O123412341ASDFADFSASDF'*/],
                         callback: function(message) {
-                            console.log(Date.now() + ': ' + JSON.stringify(message)); 
+                            console.log(Date.now() + ': ' + JSON.stringify(message));
                         }
             });
+            setInterval(function() {
+                SWARM.send({test: 'foo'});
+            }, 15000);
         </script>
     </body>
 </html>
