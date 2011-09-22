@@ -67,7 +67,6 @@
             } else if (_stanza.message) {
                 _stanza.message.to = swarms[i] + '@' + self.swarmsrv;
             }
-            console.log('Sending ' + JSON.stringify(_stanza));
             self.socket.emit('message', _stanza);
         }
     }

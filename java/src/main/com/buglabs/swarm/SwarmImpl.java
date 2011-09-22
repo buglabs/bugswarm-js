@@ -1,5 +1,7 @@
 package com.buglabs.swarm;
 
+import com.buglabs.swarm.exceptions.SwarmException;
+
 public class SwarmImpl implements Swarm {
 
 	@Override
@@ -28,6 +30,12 @@ public class SwarmImpl implements Swarm {
 
 	@Override
 	public void leave() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void send(String message) throws SwarmException {
 		// TODO Auto-generated method stub
 		
 	}
