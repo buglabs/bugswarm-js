@@ -93,12 +93,14 @@
         var len = swarms.length;
         for (var i = 0; i < len; i++) {
             if (stanza.presence) {
-                stanza.presence.to = swarms[i] + '@' +
+                var _stanza= { presence: {} };
+                _stanza.presence.to = swarms[i] + '@' +
                 this.swarmsrv + '/' + this.nickname;
             } else if (stanza.message) {
-                stanza.message.to = swarms[i] + '@' + this.swarmsrv;
+                var _stanza= stanza;
+                _stanza.message.to = swarms[i] + '@' + this.swarmsrv;
             }
-            this.socket.emit('message', stanza);
+            this.socket.emit('message', _stanza);
         }
     }
 
