@@ -5,114 +5,69 @@
  *
  * @author Bug Labs Inc.
  **/
+
 (function(exports, io) {
-    if (!io || !io.connect) {
-        throw new Error('No socket.io detected');
+    //there is not need for a buffer
+    //socket.io handles it for us.
+    function connect() {
+        var self = this;
+
+        var socket = io.connect('http://@@API_SERVER@@:80');
+        socket.on('connect', function() {
+            socket.emit('swarm:join', self.options);
+        });
+
+        socket.on('disconnect', function() {
+            self.online = false;
+            if (self.debug) {
+                console.log('disconnected');
+            }
+        });
+
+        socket.on('swarm:connected', function() {
+            self.online = true;
+        });
+
+        socket.on('swarm:message', self.onmessage);
+        socket.on('swarm.presence', self.onpresence);
+        socket.on('swarm:error', self.onerror);
+
+        socket.on('error', function(error) {
+            if (self.debug) {
+                console.log(JSON.stringify(error));
+            }
+        });
+
+        socket.on('swarm:system:error', function(error) {
+            if (self.debug) {
+                console.log(error);
+            }
+        });
+
+        self.socket = socket;
     }
 
     /**
-     * Creates Swarm instances.
-     * @param {String} apikey The Api Key with permissions to join Swarms.
      * @constructor
      **/
     var Swarm = function() {
         this.online = false;
     };
 
-    /**
-     * Clones an object.
-     * @param {Object} obj The object to be copied.
-     * @return {Object} The copy of the object.
-     **/
+    Swarm.prototype.debug = false;
 
-    function clone(obj) {
-        if (obj == null ||
-            typeof(obj) != 'object') {
-            return obj;
-        }
-
-        var copy = new obj.constructor();
-
-        for (var key in obj) {
-            copy[key] = clone(obj[key]);
-        }
-        return copy;
-    }
-
-
-    /**
-     * Sends messages to every joined swarm or a subset of them.
-     * @param {Object} stanza A javascript object representing the stanza.
-     * @param {Array} _swarms An array of a selected group
-     * of previously joined swarms.
-     * to which the user wants to send the message.
-     * @private
-     **/
-    function send(stanza, _swarms) {
-        var self = this;
-
-        var swarms = [];
-        if (_swarms) {
-            swarms = _swarms;
-        } else {
-            swarms = this.swarms;
-        }
-
-        var len = swarms.length;
-        for (var i = 0; i < len; i++) {
-            var _stanza = clone(stanza);
-            if (_stanza.presence) {
-                _stanza.presence.to = swarms[i] + '@' +
-                self.swarmsrv + '/' + self.nickname;
-            } else if (_stanza.message) {
-                _stanza.message.to = swarms[i] + '@' + self.swarmsrv;
-            }
-            self.socket.emit('message', _stanza);
-        }
-    }
-
-    /**
-     * Connects to Swarm server.
-     * @param {Function} callback The function to be
-     * called to send connection statuses.
-     * @private
-     **/
-    function connect(callback) {
-        var self = this;
-
-        var socket = io.connect('http://@@API_SERVER@@:80');
-        socket.on('connect', function() {
-            socket.emit('apikey', self.apikey);
-        });
-
-        socket.on('disconnect', function() {
-            self.online = false;
-            console.log('disconnected');
-        });
-
-        socket.on('connected to backend', function(server) {
-            self.nickname = 'browser-' +
-            (Math.random() + '' + Date.now()).split('.')[1];
-            //self.server = server;
-            self.server = server || '@@XMPP_SERVER@@';
-            self.swarmsrv = 'swarms.' + self.server;
-            self.online = true;
-
-            callback.call(self);
-        });
-
-        socket.on('error', function(error) {
-            console.log(JSON.stringify(error));
-        });
-
-        self.socket = socket;
-    }
-
-    Swarm.prototype.join = function(options) {
-        var self = this;
+    Swarm.prototype.join = function(options,
+                                    onmessage,
+                                    onpresence,
+                                    onerror) {
         if (!options.apikey) {
-            throw new Error('You must provide an API ' +
+            throw new Error('You must provide a Consumer API ' +
             'Key in order to join Swarms.');
+        }
+
+        if (!options.resource) {
+            throw new Error('You must provide a Resource id ' +
+            'in order to join Swarms.');
         }
 
         if (!options.swarms) {
@@ -120,39 +75,47 @@
             'Swarm(s) you would like to join.');
         }
 
-        /*if (!options.messagecb || typeof options.messagecb != 'function') {
+        if (!onmessage || typeof onmessage !== 'function') {
             throw new Error('In order to receive Swarm ' +
-            'messages you need to provide a function callback');
-        }*/
-
-        if (!options.callback || typeof options.callback != 'function') {
-            throw new Error('In order to receive Swarm messages ' +
-            'you need to provide a function callback');
+            'messages you need to provide a function callback.');
         }
 
-        this.apikey = options.apikey;
-
-        function _join() {
-            self.swarms = options.swarms;
-
-            if (!Array.isArray(self.swarms)) {
-                self.swarms = [self.swarms];
-            }
-
-            send.call(self, {
-                presence: {}
-            });
+        if (!Array.isArray(options.swarms)) {
+            options.swarms = [options.swarms];
         }
+
+        this.options = options;
+
+        onerror = onerror || function() {};
+        onpresence = onpresence || function() {};
+
+        this.onerror = onerror;
+        this.onpresence = onpresence;
+        this.onmessage = onmessage;
 
         if (!this.online) {
-            connect.call(this, function() {
-                _join();
-            });
-        } else {
-            _join();
+            connect.call(this);
+        }
+    };
+
+    Swarm.prototype.send = function(payload, swarms) {
+        if (!this.online) {
+            return;
         }
 
-        this.socket.on('message', options.callback);
+        if (typeof payload === 'object') {
+            payload = JSON.stringify(payload);
+        }
+
+        var message = {};
+        if (swarms && !Array.isArray(swarms)) {
+            swarms = [swarms];
+            message.swarms = swarms;
+        }
+
+        message.payload = payload;
+
+        this.socket.emit('swarm:send', message);
     };
 
     Swarm.prototype.leave = function(swarms) {
@@ -160,44 +123,11 @@
             return;
         }
 
-        if (swarms && ! Array.isArray(swarms)) {
+        if (swarms && !Array.isArray(swarms)) {
             swarms = [swarms];
         }
 
-        send.call(this, {
-            presence: {
-                type: 'unavailable'
-            }
-        },
-        swarms);
-
-        if (swarms) {
-            var len = this.swarms.length;
-            for (var i = 0; i < len; i++) {
-                var len_ = swarms.length;
-                for (var j = 0; j < len_; j++) {
-                    if (this.swarms[i] == swarms[j]) {
-                        this.swarms.splice(i, 1);
-                    }
-                }
-            }
-        } else {
-            this.swarms = [];
-        }
-    };
-
-    Swarm.prototype.send = function(payload) {
-        if (typeof payload == 'object') {
-            payload = JSON.stringify(payload);
-        }
-        var stanza = {
-            message: {
-                to: '', //workaround for json2xml converter
-                type: 'groupchat',
-                body: { $t: payload }
-            }
-        };
-        send.call(this, stanza);
+        this.socket.emit('swarm:leave', swarms);
     };
 
     exports.SWARM = new Swarm();

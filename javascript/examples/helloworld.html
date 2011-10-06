@@ -1,21 +1,36 @@
 <html>
     <head>
-        <!--<script src="http://cdn.buglabs.net/swarm/swarm-v1.0.0.beta.js"></script>
-        <script src="http://cdn.buglabs.net/swarm/swarm-v1.0.0.beta.min.js"></script> -->
+        <!--<script src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.beta.js"></script>
+        <script src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.beta.min.js"></script> -->
         
         <!-- BugLabs deployment environments (internal use only) -->
-        <!-- <script src="../dist/dev/swarm-v1.0.0.beta.js"></script> -->
-        <!-- <script src="../dist/int/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/test/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/stage/swarm-v1.0.0.beta.js"></script>
-        --><script src="../dist/prod/swarm-v1.0.0.beta.js"></script>
+        <script src="../dist/dev/swarm-v2.0.0.beta.js"></script>
+        <!-- <script src="../dist/int/swarm-v0.3.0.beta.js"></script>
+        <script src="../dist/test/swarm-v0.3.0.beta.js"></script>
+        <script src="../dist/stage/swarm-v0.3.0.beta.js"></script>
+        <script src="../dist/prod/swarm-v0.3.0.beta.js"></script> -->
          
     </head>
     <body>
         <script>
             /* Open this file twice or more and you should be able 
                 to see presence in the developer console of your browser. */
-            SWARM.join({apikey: 'cdb56c7dd912dab4c2f30a30a87b7bcfa2b34091', 
+            function onPresence(presence) {
+                console.log('presence -> ' + Date.now() + ':' + JSON.stringify(presence));
+            }
+        
+            function onMessage(message) {
+                console.log('message -> ' + Date.now() + ': ' + JSON.stringify(message));
+            }
+
+            function onError(error) {
+                console.log('error! -> ' + error);
+            }
+
+            SWARM.debug = true;
+    
+            SWARM.join({apikey: 'cdb56c7dd912dab4c2f30a30a87b7bcfa2b34091',
+                        resource: 'cdb56c7dd912dab4c2f30a30a87b7bcfa2b34091', 
                         swarms: ['db438ef12c1c79f97a7d13fdddc12e3fe3245440', 
                                  '660e96311f5ca4c39053726d2d0c81f2661a8ef3'
                                  /*'B23412342134234134', 
@@ -27,11 +42,10 @@
                                  'L243134123423414234', 
                                  'M2341234KJAS234',
                                  'N1234124123412341234',
-                                 'O123412341ASDFADFSASDF'*/],
-                        callback: function(message) {
-                            console.log(Date.now() + ': ' + JSON.stringify(message));
-                        }
-            });
+                                 'O123412341ASDFADFSASDF'*/] },
+                        onMessage,
+                        onPresence,
+                        onError);
             setInterval(function() {
                 SWARM.send({test: 'foo'});
             }, 15000);

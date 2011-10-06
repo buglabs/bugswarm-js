@@ -22,8 +22,8 @@ var config = {
 	distdir: 'dist',
 	combine: ['util.js', 'swarm.js'],
 	version: {
-		major: '1',
-		minor: '0',
+		major: '0',
+		minor: '3',
 		micro: '0',
 		qualifier: 'beta'
 	},
