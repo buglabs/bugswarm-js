@@ -29,22 +29,22 @@ var config = {
 	},
 	servers: [ //development
 		{   'env': 'dev',
-			'api': 'api.bugswarm-dev',
+			'api': 'api.dev.bugswarm.net',
 			'xmpp': 'xmpp.bugswarm-dev'
 		},
 		{ //integration
             'env': 'int',
-			'api': 'api.bugswarm-int',
+			'api': 'api.int.bugswarm.net',
 			'xmpp': 'xmpp.bugswarm-int'
 		}, 
 		{ //test
             'env': 'test',
-			'api': 'api.bugswarm-test',
+			'api': 'api.test.bugswarm.net',
 			'xmpp': 'xmpp.bugswarm-test'
 		},
 		{ //stage
             'env': 'stage',
-			'api': 'api.bugswarm-stage',
+			'api': 'api.stage.bugswarm.net',
 			'xmpp': 'xmpp.bugswarm-stage'
 		},
 		{ //production
