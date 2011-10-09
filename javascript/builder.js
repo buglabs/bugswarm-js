@@ -25,32 +25,27 @@ var config = {
 		major: '0',
 		minor: '3',
 		micro: '0',
-		qualifier: 'beta'
+		qualifier: ''
 	},
 	servers: [ //development
 		{   'env': 'dev',
-			'api': 'api.dev.bugswarm.net',
-			'xmpp': 'xmpp.bugswarm-dev'
+			'api': 'api.dev.bugswarm.net'
 		},
 		{ //integration
             'env': 'int',
-			'api': 'api.int.bugswarm.net',
-			'xmpp': 'xmpp.bugswarm-int'
+			'api': 'api.int.bugswarm.net'
 		}, 
 		{ //test
             'env': 'test',
-			'api': 'api.test.bugswarm.net',
-			'xmpp': 'xmpp.bugswarm-test'
+			'api': 'api.test.bugswarm.net'
 		},
 		{ //stage
             'env': 'stage',
-			'api': 'api.stage.bugswarm.net',
-			'xmpp': 'xmpp.bugswarm-stage'
+			'api': 'api.stage.bugswarm.net'
 		},
 		{ //production
             'env': 'prod',
-			'api': 'api.bugswarm.net',
-			'xmpp': 'bugswarm.net'
+			'api': 'api.bugswarm.net'
 		}
 	]
 };
@@ -186,7 +181,11 @@ Builder.prototype.dist = function() {
 	
 	var name = config.name;
     name += '-v' + version.major + '.' + version.minor +
-            '.' + version.micro + '.' + version.qualifier;
+            '.' + version.micro;
+    
+    if(version.qualifier !== '') {
+        name += '.' + version.qualifier;
+    }
 
 	var distdir = config.distdir;
 
