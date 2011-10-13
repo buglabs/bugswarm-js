@@ -4,7 +4,7 @@
         <script src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.beta.min.js"></script> -->
         
         <!-- BugLabs deployment environments (internal use only) -->
-        <script src="../dist/dev/swarm-v0.3.0.beta.js"></script>
+        <script src="../dist/dev/swarm-v0.3.0.js"></script>
         <!-- <script src="../dist/int/swarm-v0.3.0.beta.js"></script>
         <script src="../dist/test/swarm-v0.3.0.beta.js"></script>
         <script src="../dist/stage/swarm-v0.3.0.beta.js"></script>
@@ -30,9 +30,9 @@
 
             var timer;
 
-            SWARM.connect({ apikey: '3e98ac6ca152f9bc279d0ef6e6bc9877e1508fd8',
-                            resource: '43c65e6285d472831ca581536e381b8a30797945',
-                            swarms: ['8167429923a7bc6dc3295bb5858674983c1ff4da'],
+            SWARM.connect({ apikey: 'a2f27a74c501d118763a641c6de235ac77da1040',
+                            resource: 'b0a50609a54ebb93c0c51585d8f4f85848c1d296',
+                            swarms: ['77ab34e307e25d3028ff0d7908eade6430a26ad3'],
                             onmessage: onMessage,
                             onpresence: onPresence,
                             onerror: onError,
@@ -46,6 +46,10 @@
                     SWARM.send({test: 'foo'});
                     //SWARM.send({test: 'foo3'}, ['1234', '4321']);// goes to two swarms
                 }, 5000);
+
+                /*setTimeout(function() {
+                    SWARM.leave('b8dd7a2786dc78adde20e25efa8b7fc245c333f7');
+                }, 10000);*/
        
                 /**SWARM.leave('660e96311f5ca4c39053726d2d0c81f2661a8ef3');
                 SWARM.leave(['3eb03d425ebbcc8ce77ce0c39f50b591b640e432', 
