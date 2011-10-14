@@ -2,7 +2,7 @@ This is the javascript library to connect to BUGswarm. It's based on [socket.io]
 variety of [browsers](http://socket.io/#browser-support)
 
 The library is distributed by our [CDN](http://en.wikipedia.org/wiki/Content_delivery_network) and 
-we really encourage you to use our CDN instead of linking it locally in your own application.
+we really encourage you to use this version instead of linking it locally in your own application.
 
 ### Link the library in your web application
 
