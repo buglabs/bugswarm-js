@@ -1,15 +1,15 @@
-This is the javascript library to connect to BUGswarm. It's base on [socket.io](http://socket.io) and supports a wide
+This is the javascript library to connect to BUGswarm. It's based on [socket.io](http://socket.io) and supports a wide
 variety of [browsers](http://socket.io/#browser-support)
 
 The library is distributed by our [CDN](http://en.wikipedia.org/wiki/Content_delivery_network) and 
-we really encourage you to use this version instead of linking it locally in your own application.
+we really encourage you to use our CDN instead of linking it locally in your own application.
 
-## Link the library in your web application
+### Link the library in your web application
 
 ```html
 <html>
     <head>
-        <script src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.js"></script>
+        <script type="text/javascript" src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.js"></script>
     </head>
     <body>
         <script>
@@ -24,24 +24,18 @@ we really encourage you to use this version instead of linking it locally in you
                 console.log('message -> ' + Date.now() + ': ' + message);
             }
 
-            function onError(error) {
-                console.log('error! -> ' + JSON.stringify(error));
-            }
-
-            SWARM.debug = true;
-
-            var timer;
-
             SWARM.connect({ apikey: 'PUT YOUR PARTICIPATION APIKEY HERE',
                             resource: 'PUT YOUR RESOURCE ID',
                             swarms: ['PUT YOUR SWARMHERE'],
                             onmessage: onMessage, 
-                            onpresence: onPresence, 
-                            onerror: onError, 
-                            onconnect: onConnect});
+                            onpresence: onPresence});
         </script>
     </body>
 </html>
+```
+
+### You can clone the library and improve the library and send us pull requests
+```
 ```
 
 ### Generate distributable version.
@@ -51,5 +45,28 @@ make dist
 
 ### TODO 
 - examples
+
+## License
+(The MIT License)
+
+Copyright 2011 BugLabs. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
 
 
