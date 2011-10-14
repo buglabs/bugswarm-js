@@ -34,8 +34,10 @@ we really encourage you to use this version instead of linking it locally in you
 </html>
 ```
 
-### You can clone the library and improve the library and send us pull requests
+### Clone it, improve it and send us pull requests.
 ```
+git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/javascript
+
 ```
 
 ### Generate distributable version.
