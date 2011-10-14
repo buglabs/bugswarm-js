@@ -27,6 +27,7 @@ we really encourage you to use this version instead of linking it locally in you
                 console.log('message -> ' + Date.now() + ': ' + message);
             }
 
+            //let's use information from our 'demo' account
             SWARM.connect({ apikey: '3e98ac6ca152f9bc279d0ef6e6bc9877e1508fd8', //participation key
                             resource: '0da7ce672f5a2e067ee8a0e050ca3e363283ea39', //your resource id that also is a member of your swarm
                             swarms: ['db07c1f9ff0628e33378cf39dc16df0755cdd3f0'], //your swarm
