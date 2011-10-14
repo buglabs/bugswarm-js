@@ -64,39 +64,44 @@
         //this.options = this.options || {};
 
         if (!options.apikey) {
-            throw new Error('You must provide a Consumer API ' +
-            'Key in order to join Swarms.');
+            throw new Error('You must provide a Participation API ' +
+            'Key in order to join Swarms. Please go to ' +
+            'http://developer.bugswarm.net/restful_api_keys.html#create ' +
+            'to know how to create your API Keys.');
         }
 
         if (!options.resource) {
-            throw new Error('You must provide a Resource id ' +
-            'in order to join Swarms.');
+            throw new Error('You must provide a resource id ' +
+            'in order to join Swarms. Please go to ' +
+            'http://developer.bugswarm.net/restful_user_resources.html#create' +
+            ' to know how to create your resources and ' +
+            'http://developer.bugswarm.net/restful_swarm_resources.html#add ' +
+            'for instructions about how to add your resource ' +
+            'to your existing Swarm.');
         }
 
-        /*if (!options.swarms) {
+        if (!options.swarms ||
+            (Array.isArray(options.swarms) && !options.swarms.length)) {
             throw new Error('You need to specify which ' +
-            'Swarm(s) you would like to join.');
+            'Swarm(s) you would like to join. Please go to ' +
+            'http://developer.bugswarm.net/restful_swarms.html#create ' +
+            'if you want to know how to create them.');
         }
 
-        if (!onmessage || typeof onmessage !== 'function') {
-            throw new Error('In order to receive Swarm ' +
-            'messages you need to provide a function callback.');
+        if (options.onmessage && typeof options.onmessage !== 'function') {
+            throw new Error('onmessage needs to be a function.');
         }
 
-        if (!onpresence || typeof onpresence !== 'function') {
-            throw new Error('In order to receive presence ' +
-            'from other resources you need to provide a function callback.');
+        if (options.onpresence && typeof options.onpresence !== 'function') {
+            throw new Error('onpresence needs to be a function.');
         }
 
-        if (!onerror || typeof onerror !== 'function') {
-            throw new Error('Error handling is good for you, ' +
-            'it saves you headaches, please provide a function callback.');
-        }*/
+        if (options.onerror && typeof options.onerror !== 'function') {
+            throw new Error('onerror needs to be a function.');
+        }
 
-        if (!options.onconnect || typeof options.onconnect !== 'function') {
-            throw new Error('SWARM.connect is an asynchronous function, ' +
-            'if you want to avoid race conditions please provide ' +
-            'a function callback and use it to continue your execution flow.');
+        if (options.onconnect && typeof options.onconnect !== 'function') {
+            throw new Error('onconnect needs to a function.');
         }
 
         if (!Array.isArray(options.swarms)) {
@@ -105,8 +110,10 @@
 
         this.options = options;
 
-        //onerror = onerror || function() {};
-        //onpresence = onpresence || function() {};
+        options.onerror = options.onerror || function() {};
+        options.onpresence = options.onpresence || function() {};
+        options.onmessage = options.onmessage || function() {};
+        options.onconnect = options.onconnect || function() {};
 
         if (!this.online) {
             connect.call(this);

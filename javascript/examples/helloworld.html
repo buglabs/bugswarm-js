@@ -4,11 +4,11 @@
         <script src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.min.js"></script> -->
         
         <!-- BugLabs deployment environments (internal use only) -->
-        <script src="../dist/dev/swarm-v0.3.0.js"></script>
+        <!-- <script src="../dist/dev/swarm-v0.3.0.min.js"></script> -->
         <!-- <script src="../dist/int/swarm-v0.3.0.js"></script>
         <script src="../dist/test/swarm-v0.3.0.js"></script>
-        <script src="../dist/stage/swarm-v0.3.0.js"></script>
-        <script src="../dist/prod/swarm-v0.3.0.js"></script> -->
+        <script src="../dist/stage/swarm-v0.3.0.js"></script> -->
+        <script src="../dist/prod/swarm-v0.3.0.min.js"></script>
     </head>
     <body>
         <script>
@@ -30,9 +30,9 @@
 
             var timer;
 
-            SWARM.connect({ apikey: 'a2f27a74c501d118763a641c6de235ac77da1040',
-                            resource: 'b0a50609a54ebb93c0c51585d8f4f85848c1d296',
-                            swarms: ['77ab34e307e25d3028ff0d7908eade6430a26ad3'],
+            SWARM.connect({ apikey: '3e98ac6ca152f9bc279d0ef6e6bc9877e1508fd8',
+                            resource: '0da7ce672f5a2e067ee8a0e050ca3e363283ea39',
+                            swarms: ['db07c1f9ff0628e33378cf39dc16df0755cdd3f0'],
                             onmessage: onMessage,
                             onpresence: onPresence,
                             onerror: onError,
