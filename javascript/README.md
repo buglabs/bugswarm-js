@@ -1,4 +1,4 @@
-This is the javascript library to connect to BUGswarm. It's base on [socket.io](http://socket.io) and supports wide
+This is the javascript library to connect to BUGswarm. It's base on [socket.io](http://socket.io) and supports a wide
 variety of [browsers](http://socket.io/#browser-support)
 
 The library is distributed by our [CDN](http://en.wikipedia.org/wiki/Content_delivery_network) and 
