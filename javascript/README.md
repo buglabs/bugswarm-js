@@ -1,5 +1,8 @@
-This is the javascript library to connect to BUGswarm. It's based on [socket.io](http://socket.io) and supports a wide
-variety of [browsers](http://socket.io/#browser-support)
+# BUGswarm Javascript Library
+
+Connect your resources to BUGswarm and share their information with any web browser through our 
+Javascript library. It is based on [socket.io](http://socket.io) and supports a wide
+variety of [browsers](http://socket.io/#browser-support).
 
 The library is distributed by our [CDN](http://en.wikipedia.org/wiki/Content_delivery_network) and 
 we really encourage you to use this version instead of linking it locally in your own application.
@@ -9,11 +12,11 @@ we really encourage you to use this version instead of linking it locally in you
 ```html
 <html>
     <head>
-        <script type="text/javascript" src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.js"></script>
+        <script type="text/javascript" src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.min.js"></script>
     </head>
     <body>
         <script>
-            /* Open this file twice or more and you should be able 
+            /* Open this file twice or more with your browser and you should be able 
                 to see your own presence messages in the developer 
                 console of your browser. */
             function onPresence(presence) {
@@ -24,11 +27,11 @@ we really encourage you to use this version instead of linking it locally in you
                 console.log('message -> ' + Date.now() + ': ' + message);
             }
 
-            SWARM.connect({ apikey: 'PUT YOUR PARTICIPATION APIKEY HERE',
-                            resource: 'PUT YOUR RESOURCE ID',
-                            swarms: ['PUT YOUR SWARMHERE'],
-                            onmessage: onMessage, 
-                            onpresence: onPresence});
+            SWARM.connect({ apikey: '3e98ac6ca152f9bc279d0ef6e6bc9877e1508fd8', //participation key
+                            resource: '0da7ce672f5a2e067ee8a0e050ca3e363283ea39', //your resource id that also is a member of your swarm
+                            swarms: ['db07c1f9ff0628e33378cf39dc16df0755cdd3f0'], //your swarm
+                            onmessage: onMessage, //your message function callback
+                            onpresence: onPresence}); //our presence function callback
         </script>
     </body>
 </html>
@@ -38,14 +41,6 @@ we really encourage you to use this version instead of linking it locally in you
 ```shell
 git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/javascript
 ```
-
-### Generate distributable version.
-```shell
-make dist
-```
-
-### TODO 
-- examples
 
 ## License
 (The MIT License)
