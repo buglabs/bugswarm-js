@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="/tmp/bugswarm-java.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/Swarm/makejar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" mainClassHandleIdentifier="=Swarm/test&lt;com.buglabs.swarm{ConnectionTest.java[ConnectionTest" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="false" exportJavaFiles="false" exportOutputFolder="true">
+        <file path="/Swarm/.project"/>
+        <javaElement handleIdentifier="=Swarm/test"/>
+        <javaElement handleIdentifier="=Swarm/main"/>
+        <folder path="/Swarm/lib"/>
+        <folder path="/Swarm/src"/>
+        <file path="/Swarm/.classpath"/>
+    </selectedElements>
+</jardesc>
