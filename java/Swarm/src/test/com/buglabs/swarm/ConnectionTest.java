@@ -1,12 +1,23 @@
 package com.buglabs.swarm;
 
+import java.util.Map;
+
+import org.hyperic.sigar.CpuInfo;
+import org.hyperic.sigar.Sigar;
+
 import com.buglabs.swarm.connection.Connection;
 
 public class ConnectionTest {
+	private static Sigar sigar;
+
 	public static void main(String[] args) {
 		Connection conn = new Connection();
-		String apiKey = "762aa1740d2bb21923abd5bd54a272cd1031f476"; //participation key
-		String resourceId = "b013f99c9fea77cdd5f93a80ec6411f22b70e84c";
+		String apiKey = "9e6e99e5303c6675cd1eaedfed50807d35d611e9"; //participation key
+		String resourceId = "a5857a23eb95fe9b78a9735d788c018d5d792e2e";
+		String swarmID = "5fc95142592ef73ecf14f2e703b7c12382b7506b"; 
+		
+		sigar = new Sigar();
+		
 		
 		class CallbackImpl implements Callback {
 			@Override
@@ -22,8 +33,23 @@ public class ConnectionTest {
 			
 			conn.open(apiKey, callback);
 			while(true) {
-				String feed = "{\"message\": {\"to\": [\"61ec44aaa1483021574b63055620e24be161a609\"],\"payload\":{ \"$t\": \"test\"}}}";
-				conn.send(feed);
+				StringBuilder message = new StringBuilder();
+				message.append("{\"message\": {\"to\": [\""+ swarmID + "\"],\"payload\":{");
+				
+				
+				CpuInfo info = new CpuInfo();
+				
+				
+				Map <String, String> map = info.toMap();
+				for (Map.Entry<String, String> entry : map.entrySet())
+				{
+				    message.append("\""+entry.getKey()+"\":\""+ entry.getValue()+"\",");
+				    
+				}
+				
+
+				message.append("}}}");
+				conn.send(message.toString());
 				Thread.sleep(5000);
 			}
 		} catch (Exception e) {

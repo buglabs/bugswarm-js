@@ -37,7 +37,7 @@ public class Connection {
 		}
 
 		InetSocketAddress socketAddress = new InetSocketAddress(
-				"api.dev.bugswarm.net", 80); //TODO put this conf in a properties file
+				"api.bugswarm.net", 80); //TODO put this conf in a properties file
 
 		channel = SocketChannel.open();
 	

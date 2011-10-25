@@ -29,8 +29,8 @@ public class Producer implements Runnable {
 	@Override
 	public void run() {
 		StringBuilder chunk = new StringBuilder();
-		chunk.append("POST /stream?swarm_id=61ec44aaa1483021574b63055620e24be161a609&resource_id=b013f99c9fea77cdd5f93a80ec6411f22b70e84c HTTP/1.1").append(CRLF);
-		chunk.append("Host: api.dev.bugswarm.net").append(CRLF);
+		chunk.append("POST /stream?swarm_id=5fc95142592ef73ecf14f2e703b7c12382b7506b&resource_id=a5857a23eb95fe9b78a9735d788c018d5d792e2e HTTP/1.1").append(CRLF);
+		chunk.append("Host: api.bugswarm.net").append(CRLF);
 		chunk.append("Accept: application/json").append(CRLF);
 		chunk.append("X-BugSwarmApiKey: ").append(apiKey).append(CRLF);
 		

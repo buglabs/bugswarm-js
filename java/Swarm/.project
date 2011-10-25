@@ -18,12 +18,12 @@
 		<link>
 			<name>main</name>
 			<type>2</type>
-			<location>/Users/camilo/Dropbox/Development/buglabs/bugswarm-api/java/Swarm/src/main</location>
+			<location>/home/jconnolly/buglabs/dev/misc/bugswarm-api/java/Swarm/src/main</location>
 		</link>
 		<link>
 			<name>test</name>
 			<type>2</type>
-			<location>/Users/camilo/Dropbox/Development/buglabs/bugswarm-api/java/Swarm/src/test</location>
+			<location>/home/jconnolly/buglabs/dev/misc/bugswarm-api/java/Swarm/src/test</location>
 		</link>
 	</linkedResources>
 </projectDescription>
