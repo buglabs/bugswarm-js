@@ -15,7 +15,7 @@ This library is an implementation of
 * Sends and receives binary files.
 
 ### Installation
-`npm install bugswarm'
+`npm install bugswarm`
 
 ### Usage example
 
