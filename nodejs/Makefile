@@ -5,16 +5,16 @@ FIX_STYLE := /usr/local/bin/fixjsstyle
 JSLINT_PARAMS := --custom_jsdoc_tags public,static --recurse lib/ --recurse test/
 
 test:
-        @./support/mocha/bin/mocha \
-                --require should \
-                --reporter $(REPORTER) \
-                --ui bdd \
-                $(TESTS)
+	@./support/mocha/bin/mocha \
+		--require should \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		$(TESTS)
 
 jslint:
-        $(JSLINT) $(JSLINT_PARAMS)
+	$(JSLINT) $(JSLINT_PARAMS)
 
 fixstyle:
-        $(FIX_STYLE) $(JSLINT_PARAMS)
+	$(FIX_STYLE) $(JSLINT_PARAMS)
 
 .PHONY: test jslint fixstyle
