@@ -6,7 +6,7 @@ invitations and API keys. Use the participation module to send and receive
 messages and binary data.
 
 This library is an implementation of 
-[BUGswarm API](http://developer.bugswarm.net/) 
+[BUGswarm API](http://developer.bugswarm.net/).
 
 ### Features
 * Manages swarms, resources, invitations and apikeys.
