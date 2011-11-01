@@ -3,3 +3,4 @@ design-api.js
 *.swo
 node_modules
 java/bin
+*.settings.xml
