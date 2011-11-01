@@ -34,7 +34,7 @@ Consuming:
 Take a look at the [documentation]() for details about the library API and, 
 for more comprehensive examples, at the [examples]() directory. 
 
-### Clone it, improve it and send us pull requests.
+### Fork it, improve it and send us pull requests.
 ```shell
 git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/nodejs
 ```
