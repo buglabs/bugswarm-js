@@ -38,7 +38,7 @@ we really encourage you to use this version instead of linking it locally in you
 </html>
 ```
 
-### Clone it, improve it and send us pull requests.
+### Fork it, improve it and send us pull requests.
 ```shell
 git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/javascript
 ```
