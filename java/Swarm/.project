@@ -13,17 +13,5 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-	</natures>
-	<linkedResources>
-		<link>
-			<name>main</name>
-			<type>2</type>
-			<location>/Users/camilo/Dropbox/Development/buglabs/bugswarm-api/java/Swarm/src/main</location>
-		</link>
-		<link>
-			<name>test</name>
-			<type>2</type>
-			<location>/Users/camilo/Dropbox/Development/buglabs/bugswarm-api/java/Swarm/src/test</location>
-		</link>
-	</linkedResources>
+	</natures>	
 </projectDescription>
