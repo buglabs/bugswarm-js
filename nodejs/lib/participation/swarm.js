@@ -1,6 +1,6 @@
 var connection = require('./connection');
 
-var SWARM = module.exports = (function() {
+/*var SWARM = module.exports = (function() {
     var options = { apikey: 'sandbox api key',
                     resource: 'sandbox resource',
                     swarms: 'sandbox swarm',
@@ -12,4 +12,4 @@ var SWARM = module.exports = (function() {
     this.join = function() {return this;};
     this.leave = function() {return this;};
     this.send = function() {return this;};
-}).call(SWARM.prototype);
+}).call(SWARM.prototype);*/
