@@ -20,8 +20,7 @@ var ApiKey = module.exports = function(username, password) {
     var my = {};
 
     my.generate = function() {
-        var type;
-        var callback;
+        var type, callback;
 
         var arglen = arguments.length;
         if (arglen > 2 || arglen < 1) {
@@ -39,9 +38,7 @@ var ApiKey = module.exports = function(username, password) {
                 'string with a API key type is expected as the first ' +
                 'argument and a callback function as the second argument.');
             }
-        }
-
-        if (arglen == 1) {
+        } else if (arglen == 1) {
             callback = arguments[0];
             if (typeof callback !== 'function') {
                 throw new TypeError('When invoking with one argument, a ' +
@@ -71,8 +68,7 @@ var ApiKey = module.exports = function(username, password) {
     };
 
     my.get = function() {
-        var type;
-        var callback;
+        var type, callback;
 
         var arglen = arguments.length;
         if (arglen > 2 || arglen < 1) {
@@ -90,9 +86,7 @@ var ApiKey = module.exports = function(username, password) {
                 'string with a API key type is expected as the first ' +
                 'argument and a callback function as the second argument.');
             }
-        }
-
-        if (arglen == 1) {
+        } else if (arglen == 1) {
             callback = arguments[0];
             if (typeof callback !== 'function') {
                 throw new TypeError('When invoking with one argument, a ' +
