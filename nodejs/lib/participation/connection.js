@@ -3,7 +3,7 @@ var util = require("util");
 
 var EventEmitter = require('events').EventEmitter;
 
-var queue = require('circular-queue');
+var queue = require('./circular-queue');
 
 var Connection = module.exports = function() {
     EventEmitter.call(this);
