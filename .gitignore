@@ -4,3 +4,4 @@ design-api.js
 node_modules
 java/bin
 *.settings.xml
+*.class
