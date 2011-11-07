@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: com.buglabs.bugswarm.api
+Bundle-SymbolicName: com.buglabs.bugswarm.api
+Bundle-Version: 0.3.0
+Bundle-Vendor: John Connolly
+Bundle-Description: Connector using streaming bidirectional chunked http.
+Bug-Bundle-Type: Library
+BUG-API-Version: 2.0.2
+Export-Package: com.buglabs.bugswarm.api.pub
