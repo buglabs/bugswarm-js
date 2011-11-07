@@ -8,12 +8,12 @@ describe('ApiKey', function(){
     var partkey;
     
     before(function(done) {
-        apikey = new ApiKey(user, password);
+        ApiKey.initialize(user, password);
         done();
     });
 
     it('should generate configuration and participation keys', function(done){
-        apikey.generate(function(err, keys) {
+        ApiKey.generate(function(err, keys) {
             Array.isArray(keys).should.be.true;
             keys.should.have.length(2);
             
@@ -29,7 +29,7 @@ describe('ApiKey', function(){
     });
     
     it('should generate only the configuration key', function(done) {
-        apikey.generate('configuration', function(err, key) {
+        ApiKey.generate('configuration', function(err, key) {
             key.should.be.a('object');
             
             ['user_id', 'created_at', 'status', 'type', 'key']
@@ -47,7 +47,7 @@ describe('ApiKey', function(){
     });
     
     it('should generate only the participation key', function(done) {
-        apikey.generate('participation', function(err, key) {
+        ApiKey.generate('participation', function(err, key) {
             key.should.be.a('object');
             
             ['user_id', 'created_at', 'status', 'type', 'key']
@@ -65,7 +65,7 @@ describe('ApiKey', function(){
     });
     
     it('should return an error if key type is invalid', function(done) {
-        apikey.generate('invalid_type', function(err, key) {
+        ApiKey.generate('invalid_type', function(err, key) {
             Array.isArray(err).should.be.true;
             err[0].message.should.be.eql('Instance is not one of the possible '+
             'values');
@@ -77,7 +77,7 @@ describe('ApiKey', function(){
     });
     
     it('should return all the apikeys', function(done){
-        apikey.get(function(err, keys) {
+        ApiKey.get(function(err, keys) {
             Array.isArray(keys).should.be.true;
             keys.should.have.length(2);
             
@@ -93,7 +93,7 @@ describe('ApiKey', function(){
     });
     
     it('should return only the configuration key', function(done) {
-        apikey.get('configuration', function(err, key) {
+        ApiKey.get('configuration', function(err, key) {
             key.should.be.a('object');
             
             ['user_id', 'created_at', 'status', 'type', 'key']
@@ -112,7 +112,7 @@ describe('ApiKey', function(){
     });
        
     it('should return only the participation key', function(done) {
-        apikey.get('participation', function(err, key) {
+        ApiKey.get('participation', function(err, key) {
             key.should.be.a('object');
             
             ['user_id', 'created_at', 'status', 'type', 'key']

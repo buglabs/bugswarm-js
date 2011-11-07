@@ -1,23 +1,20 @@
 var request = require('superagent');
 var config = require('../config');
-//TODO - cache keys, basically apikey.participation should return the key
-//right away or retrieve it from the server. The same applies for the
-//configuration key.
 
-var ApiKey = module.exports = function(username, password) {
-    if (!username || !password) {
-        throw new TypeError('You must provide a username and password as ' +
-        'arguments to this constructor.');
-    }
-
-    /**
-     * Authentication string.
-     * @private
-     **/
-    var auth = 'Basic ' +
-    new Buffer(username + ':' + password).toString('base64');
+var ApiKey = module.exports = (function() {
+    var url = config.baseurl + '/keys';
+    var auth;
 
     var my = {};
+    my.initialize = function(username, password) {
+        if (!username || !username.length ||
+            !password || !password.length) {
+            throw new TypeError('You must provide a username and password ' +
+            'to initialize this module.');
+        }
+        auth = 'Basic ' +
+        new Buffer(username + ':' + password).toString('base64');
+    };
 
     my.generate = function() {
         var type, callback;
@@ -46,14 +43,8 @@ var ApiKey = module.exports = function(username, password) {
             }
         }
 
-        var url = config.baseurl + '/keys';
-
-        if (type) {
-            url += '/' + type;
-        }
-
         request
-        .post(url)
+        .post(type ? url + '/' + type : url)
         .set('Authorization', auth)
         .end(function(err, res) {
             if (res.status == 201) {
@@ -94,14 +85,8 @@ var ApiKey = module.exports = function(username, password) {
             }
         }
 
-        var url = config.baseurl + '/keys';
-
-        if (type) {
-            url += '/' + type;
-        }
-
         request
-        .get(url)
+        .get(type ? url + '/' + type : url)
         .set('Authorization', auth)
         .end(function(err, res) {
             if (res.status == 200) {
@@ -116,4 +101,4 @@ var ApiKey = module.exports = function(username, password) {
     };
 
     return my;
-};
+})();

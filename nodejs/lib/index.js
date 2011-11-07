@@ -1,4 +1,4 @@
 module.exports = {
-    configuration: require('./configuration'),
-    participation: require('./participation')
+    configuration: require('./configuration')
+    //participation: require('./participation')(prtApiKey)
 };
