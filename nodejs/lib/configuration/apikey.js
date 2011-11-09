@@ -1,22 +1,20 @@
 var request = require('superagent');
 var config = require('../config');
 
-var ApiKey = module.exports = (function() {
-    var url = config.baseurl + '/keys';
-    var auth;
-
-    var my = {};
-    my.initialize = function(username, password) {
-        if (!username || !username.length ||
-            !password || !password.length) {
+var ApiKey = function(username, password) {
+     if (!username || !username.length ||
+         !password || !password.length) {
             throw new TypeError('You must provide a username and password ' +
             'to initialize this module.');
-        }
-        auth = 'Basic ' +
-        new Buffer(username + ':' + password).toString('base64');
-    };
+    }
 
-    my.generate = function() {
+    this.auth = 'Basic ' +
+        new Buffer(username + ':' + password).toString('base64');
+    this.url = config.baseurl + '/keys';
+};
+
+(function() {
+    this.generate = function() {
         var type, callback;
 
         var arglen = arguments.length;
@@ -43,9 +41,11 @@ var ApiKey = module.exports = (function() {
             }
         }
 
+        var url = this.url;
+
         request
         .post(type ? url + '/' + type : url)
-        .set('Authorization', auth)
+        .set('Authorization', this.auth)
         .end(function(err, res) {
             if (res.status == 201) {
                 callback(err, res.body);
@@ -58,7 +58,7 @@ var ApiKey = module.exports = (function() {
         });
     };
 
-    my.get = function() {
+    this.get = function() {
         var type, callback;
 
         var arglen = arguments.length;
@@ -85,9 +85,11 @@ var ApiKey = module.exports = (function() {
             }
         }
 
+        var url = this.url;
+
         request
         .get(type ? url + '/' + type : url)
-        .set('Authorization', auth)
+        .set('Authorization', this.auth)
         .end(function(err, res) {
             if (res.status == 200) {
                 callback(err, res.body);
@@ -100,5 +102,6 @@ var ApiKey = module.exports = (function() {
         });
     };
 
-    return my;
-})();
+}).call(ApiKey.prototype);
+
+module.exports = ApiKey;

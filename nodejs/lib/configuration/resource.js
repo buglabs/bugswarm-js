@@ -1,22 +1,19 @@
 var request = require('superagent');
 var config = require('../config');
 
-var Resource = module.exports = (function() {
-    var url = config.baseurl + '/resources';
+var Resource = function(key) {
+    if (!key || !key.length) {
+        throw new TypeError('You must provide an API Key to ' +
+        'call this constructor.');
+    }
+    this.apikey = key;
+    this.url = config.baseurl + '/resources';
+};
+
+(function() {
     var apikeyHeader = config.apikey_header;
 
-
-    var apikey;
-    var my = {};
-    my.initialize = function(key) {
-        if (!key || !key.length) {
-            throw new TypeError('You must provide an API Key to ' +
-            'initialize this module.');
-        }
-        apikey = key;
-    };
-
-    my.create = function() {
+    this.create = function() {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -36,8 +33,8 @@ var Resource = module.exports = (function() {
         }
 
         request
-        .post(url)
-        .set(apikeyHeader, apikey)
+        .post(this.url)
+        .set(apikeyHeader, this.apikey)
         .data(data)
         .end(function(err, res) {
             if (res.status == 201) {
@@ -51,7 +48,7 @@ var Resource = module.exports = (function() {
         });
     };
 
-    my.update = function() {
+    this.update = function() {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -83,8 +80,8 @@ var Resource = module.exports = (function() {
         });
 
         request
-        .put(url + '/' + id)
-        .set(apikeyHeader, apikey)
+        .put(this.url + '/' + id)
+        .set(apikeyHeader, this.apikey)
         .data(data)
         .end(function(err, res) {
             if (res.status == 200) {
@@ -98,7 +95,7 @@ var Resource = module.exports = (function() {
         });
     };
 
-    my.swarms = function() {
+    this.swarms = function() {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -119,8 +116,8 @@ var Resource = module.exports = (function() {
         }
 
         request
-        .get(url + '/' + id + '/swarms')
-        .set(apikeyHeader, apikey)
+        .get(this.url + '/' + id + '/swarms')
+        .set(apikeyHeader, this.apikey)
         .end(function(err, res) {
             if (res.status == 200) {
                 callback(err, res.body);
@@ -133,7 +130,7 @@ var Resource = module.exports = (function() {
         });
     };
 
-    my.get = function(){
+    this.get = function(){
         var id, callback;
 
         var arglen = arguments.length;
@@ -162,9 +159,11 @@ var Resource = module.exports = (function() {
             }
         }
 
+        var url = this.url;
+
         request
         .get(id ? url + '/' + id : url)
-        .set(apikeyHeader, apikey)
+        .set(apikeyHeader, this.apikey)
         .end(function(err, res) {
             if (res.status == 200) {
                 callback(err, res.body);
@@ -177,7 +176,7 @@ var Resource = module.exports = (function() {
         });
     };
 
-    my.destroy = function(){
+    this.destroy = function(){
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -197,8 +196,8 @@ var Resource = module.exports = (function() {
         }
 
         request
-        .del(url + '/' + id)
-        .set(apikeyHeader, apikey)
+        .del(this.url + '/' + id)
+        .set(apikeyHeader, this.apikey)
         .end(function(err, res) {
             if (res.status == 204) {
                 callback();
@@ -210,6 +209,6 @@ var Resource = module.exports = (function() {
             }
         });
     };
+}).call(Resource.prototype);
 
-    return my;
-})();
+module.exports = Resource;

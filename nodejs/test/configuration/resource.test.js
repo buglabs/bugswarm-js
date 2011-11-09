@@ -1,14 +1,17 @@
-var Resource = require('../../bugswarm').configuration.Resource;
-var ApiKey = require('../../bugswarm').configuration.ApiKey;
+var ResourceService = require('../../bugswarm').configuration.ResourceService;
+var ApiKeyService = require('../../bugswarm').configuration.ApiKeyService;
 
-describe('Resource', function(){
+describe('Resource service', function(){
     var resourceId;
 
+    var apikeyService;
+    var resourceService;
+
     before(function(done) {
-        ApiKey.initialize('librarytest', 'test');
-        ApiKey.generate('configuration',
+        apikeyService = new ApiKeyService('librarytest', 'test');
+        apikeyService.generate('configuration',
         function(err, apikey) {
-            Resource.initialize(apikey.key);
+            resourceService = new ResourceService(apikey.key);
             done();
         });
     });
@@ -20,7 +23,7 @@ describe('Resource', function(){
             machine_type: 'bug'
         };
 
-        Resource.create(data, function(err, resource) {
+        resourceService.create(data, function(err, resource) {
             resource.should.be.a('object');
 
             resource.should.have.property('id');
@@ -35,11 +38,11 @@ describe('Resource', function(){
     });
 
     it('should get a specific resource by id', function(done) {
-        Resource.get(resourceId, function(err, resource) {
+        resourceService.get(resourceId, function(err, resource) {
             resource.should.be.a('object');
             resource.should.have.property('id');
             resource.id.should.be.eql(resourceId);
-            
+
             ['name', 'user_id', 'id', 'description', 'machine_type',
              'created_at'].forEach(function(p) {
                 resource.should.have.property(p);
@@ -49,12 +52,12 @@ describe('Resource', function(){
     });
 
     it('should update a resource', function(done) {
-        Resource.get(resourceId, function(err, _resource) {
+        resourceService.get(resourceId, function(err, _resource) {
             _resource.name = 'my resource modified';
             _resource.description = 'my description modified';
             _resource.machine_type = 'pc';
-            
-            Resource.update(_resource, function(err, resource) {
+
+            resourceService.update(_resource, function(err, resource) {
                 resource.should.be.a('object');
                 resource.should.have.property('id');
                 resource.id.should.be.eql(resourceId);
@@ -69,7 +72,7 @@ describe('Resource', function(){
     });
 
     it('should get all the existing resources', function(done) {
-        Resource.get(function(err, resources) {
+        resourceService.get(function(err, resources) {
             Array.isArray(resources).should.be.eql(true);
             resources.length.should.be.above(0);
             resources.forEach(function(resource) {
@@ -84,7 +87,7 @@ describe('Resource', function(){
 
     it('should return the list of swarms where the resource is ' +
     'a participant', function(done) {
-        Resource.swarms(resourceId, function(err, swarms) {
+        resourceService.swarms(resourceId, function(err, swarms) {
             Array.isArray(swarms).should.be.eql(true);
             swarms.length.should.be.eql(0);
             done();
@@ -92,12 +95,13 @@ describe('Resource', function(){
     });
 
     it('should destroy a resource', function(done) {
-        Resource.destroy(resourceId, function(err) {
-            //TODO
-            //uncomment when https://github.com/visionmedia/should.js/issues/25
-            //is fixed.
-            //should.exist(err);
-            done();
+        resourceService.destroy(resourceId, function(err) {
+            resourceService.get(resourceId, function(err, _resource) {
+                Array.isArray(err).should.be.eql(true);
+                err[0].should.be.a('object');
+                err[0].description.should.be.eql('Resource not found.');
+                done();
+            });
         });
     });
 });

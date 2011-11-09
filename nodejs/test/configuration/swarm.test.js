@@ -1,17 +1,21 @@
-var Swarm = require('../../bugswarm').configuration.Swarm;
-var Resource = require('../../bugswarm').configuration.Resource;
-var ApiKey = require('../../bugswarm').configuration.ApiKey;
+var SwarmService = require('../../bugswarm').configuration.SwarmService;
+var ResourceService = require('../../bugswarm').configuration.ResourceService;
+var ApiKeyService = require('../../bugswarm').configuration.ApiKeyService;
 
-describe('Swarm', function(){
+describe('Swarm service', function(){
     var swarmId;
     var resource;
 
+    var apikeyService;
+    var swarmService;
+    var resourceService;
+
     before(function(done) {
-        ApiKey.initialize('librarytest', 'test');
-        ApiKey.generate('configuration',
-        function(err, apikey) {
-            Swarm.initialize(apikey.key);
-            Resource.initialize(apikey.key);
+        apikeyService = new ApiKeyService('librarytest', 'test');
+        apikeyService.generate('configuration',
+        function(err, data) {
+            swarmService = new SwarmService(data.key);
+            resourceService = new ResourceService(data.key);
             done();
         });
     });
@@ -23,7 +27,7 @@ describe('Swarm', function(){
             description: 'my swarm description'
         };
 
-        Swarm.create(data, function(err, swarm) {
+        swarmService.create(data, function(err, swarm) {
             swarm.should.be.a('object');
 
             swarm.should.have.property('id');
@@ -42,7 +46,7 @@ describe('Swarm', function(){
     });
 
     it('should get information by swarm id', function(done) {
-        Swarm.get(swarmId, function(err, swarm) {
+        swarmService.get(swarmId, function(err, swarm) {
             swarm.should.be.a('object');
             swarm.should.have.property('id');
             swarm.id.should.be.eql(swarmId);
@@ -56,12 +60,12 @@ describe('Swarm', function(){
     });
 
     it('should update swarm information', function(done) {
-         Swarm.get(swarmId, function(err, _swarm) {
+         swarmService.get(swarmId, function(err, _swarm) {
             _swarm.name = 'my swarm modified';
             _swarm.description = 'my description modified';
             _swarm.public = true;
 
-            Swarm.update(_swarm, function(err, swarm) {
+            swarmService.update(_swarm, function(err, swarm) {
                 swarm.should.be.a('object');
                 swarm.should.have.property('id');
                 swarm.id.should.be.eql(swarmId);
@@ -76,7 +80,7 @@ describe('Swarm', function(){
     });
 
     it('should get all the existing swarms', function(done) {
-        Swarm.get(function(err, swarms) {
+        swarmService.get(function(err, swarms) {
             Array.isArray(swarms).should.be.eql(true);
             swarms.length.should.be.above(0);
             swarms.forEach(function(swarm) {
@@ -96,15 +100,15 @@ describe('Swarm', function(){
             machine_type: 'bug'
         };
 
-        Resource.create(data, function(err, _resource) {
+        resourceService.create(data, function(err, _resource) {
             var options = {
                 swarm_id: swarmId,
                 resource_id: _resource.id,
                 resource_type: 'consumer'
             };
 
-            Swarm.addResource(options, function(err) {
-                Swarm.get(swarmId, function(err, swarm) {
+            swarmService.addResource(options, function(err) {
+                swarmService.get(swarmId, function(err, swarm) {
                     swarm.should.be.a('object');
                     swarm.should.have.property('resources');
                     Array.isArray(swarm.resources).should.be.eql(true);
@@ -130,7 +134,7 @@ describe('Swarm', function(){
     });
 
     it('should list swarm participants', function(done) {
-        Swarm.resources(swarmId, function(err, resources) {
+        swarmService.resources(swarmId, function(err, resources) {
             Array.isArray(resources).should.be.eql(true);
             resources.should.have.length(1);
             done();
@@ -138,7 +142,7 @@ describe('Swarm', function(){
     });
 
     it('should list consumer participants only', function(done) {
-        Swarm.resources(swarmId, 'consumer', function(err, resources) {
+        swarmService.resources(swarmId, 'consumer', function(err, resources) {
             resources.forEach(function(r) {
                 r.should.be.a('object');
                 ['resource_type', 'resource_id', 'user_id',
@@ -158,8 +162,8 @@ describe('Swarm', function(){
             resource_type: resource.type
         };
 
-        Swarm.removeResource(options, function(err) {
-            Swarm.get(swarmId, function(err, swarm) {
+        swarmService.removeResource(options, function(err) {
+            swarmService.get(swarmId, function(err, swarm) {
                 swarm.should.be.a('object');
                 swarm.should.have.property('resources');
                 Array.isArray(swarm.resources).should.be.eql(true);
@@ -176,8 +180,8 @@ describe('Swarm', function(){
             resource_type: 'producer'
         };
 
-        Swarm.addResource(options, function(err) {
-            Swarm.resources(swarmId, 'producer', function(err, resources) {
+        swarmService.addResource(options, function(err) {
+            swarmService.resources(swarmId, 'producer', function(err, resources) {
                 resources.forEach(function(r) {
                     r.should.be.a('object');
                     ['resource_type', 'resource_id', 'user_id',
@@ -196,8 +200,8 @@ describe('Swarm', function(){
     });*/
 
     it('should destroy a swarm', function(done) {
-        Swarm.destroy(swarmId, function(err) {
-            Swarm.get(swarmId, function(err, swarm) {
+        swarmService.destroy(swarmId, function(err) {
+            swarmService.get(swarmId, function(err, swarm) {
                 Array.isArray(err).should.be.eql(true);
                 err.should.have.length(1);
                 err[0].description.should.be.eql('Swarm not found.');

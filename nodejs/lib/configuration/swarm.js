@@ -1,22 +1,19 @@
 var request = require('superagent');
 var config = require('../config');
 
-var Swarm = module.exports = (function() {
-    var url = config.baseurl + '/swarms';
+var Swarm = function(key) {
+     if (!key || !key.length) {
+        throw new TypeError('You must provide an API Key to ' +
+        'create an instance of this class.');
+    }
+    this.apikey = key;
+    this.url = config.baseurl + '/swarms';
+};
+
+(function() {
     var apikeyHeader = config.apikey_header;
 
-    var apikey;
-    var my = {};
-
-    my.initialize = function(key) {
-        if (!key || !key.length) {
-            throw new TypeError('You must provide an API Key to ' +
-            'initialize this module.');
-        }
-        apikey = key;
-    };
-
-    my.create = function() {
+    this.create = function() {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -36,8 +33,8 @@ var Swarm = module.exports = (function() {
         }
 
         request
-        .post(url)
-        .set(apikeyHeader, apikey)
+        .post(this.url)
+        .set(apikeyHeader, this.apikey)
         .data(data)
         .end(function(err, res) {
             if (res.status == 201) {
@@ -51,7 +48,7 @@ var Swarm = module.exports = (function() {
         });
     };
 
-    my.update = function() {
+    this.update = function() {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -84,8 +81,8 @@ var Swarm = module.exports = (function() {
         });
 
         request
-        .put(url + '/' + id)
-        .set(apikeyHeader, apikey)
+        .put(this.url + '/' + id)
+        .set(apikeyHeader, this.apikey)
         .data(data)
         .end(function(err, res) {
             if (res.status == 200) {
@@ -99,7 +96,7 @@ var Swarm = module.exports = (function() {
         });
     };
 
-    my.get = function() {
+    this.get = function() {
         var id, callback;
 
         var arglen = arguments.length;
@@ -127,9 +124,11 @@ var Swarm = module.exports = (function() {
             }
         }
 
+        var url = this.url;
+
         request
         .get(id ? url + '/' + id : url)
-        .set(apikeyHeader, apikey)
+        .set(apikeyHeader, this.apikey)
         .end(function(err, res) {
             if (res.status == 200) {
                 callback(err, res.body);
@@ -150,7 +149,7 @@ var Swarm = module.exports = (function() {
      * };
      **/
 
-    my.addResource = function(options, callback) {
+    this.addResource = function(options, callback) {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -195,8 +194,8 @@ var Swarm = module.exports = (function() {
         };
 
         request
-        .post(url + '/' + swarmId + '/resources')
-        .set(apikeyHeader, apikey)
+        .post(this.url + '/' + swarmId + '/resources')
+        .set(apikeyHeader, this.apikey)
         .data(resource)
         .end(function(err, res) {
             if (res.status == 201) {
@@ -210,7 +209,7 @@ var Swarm = module.exports = (function() {
         });
     };
 
-    my.removeResource = function(options, callback) {
+    this.removeResource = function(options, callback) {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -255,8 +254,8 @@ var Swarm = module.exports = (function() {
         };
 
         request
-        .del(url + '/' + swarmId + '/resources')
-        .set(apikeyHeader, apikey)
+        .del(this.url + '/' + swarmId + '/resources')
+        .set(apikeyHeader, this.apikey)
         .data(resource)
         .end(function(err, res) {
             if (res.status == 204) {
@@ -270,7 +269,7 @@ var Swarm = module.exports = (function() {
         });
     };
 
-    my.resources = function() {
+    this.resources = function() {
         var swarmId, resourceType, callback;
 
         var arglen = arguments.length;
@@ -308,13 +307,13 @@ var Swarm = module.exports = (function() {
 
         var data = {};
         if(resourceType) {
-            data.type = resourceType;    
+            data.type = resourceType;
         }
 
         request
-        .get(url + '/' + swarmId + '/resources')
+        .get(this.url + '/' + swarmId + '/resources')
         .data(data)
-        .set(apikeyHeader, apikey)
+        .set(apikeyHeader, this.apikey)
         .end(function(err, res) {
             if (res.status == 200) {
                 callback(err, res.body);
@@ -328,11 +327,31 @@ var Swarm = module.exports = (function() {
 
     };
 
-    my.invite = function() {
+    this.invite = function() {
+        var invitation = {
+            to: 'test2',
+            resource_id: resource.id,
+            resource_type: 'producer',
+            description: 'Hey feel free to produce information in my Swarm.'
+        };
 
+        request
+        .get(this.url + '/' + swarmId + '/invitations')
+        .data(invitation)
+        .set(apikeyHeader, this.apikey)
+        .end(function(err, res) {
+            if (res.status == 200) {
+                callback(err, res.body);
+            } else {
+                if (!err) {
+                    err = res.body || res.text;
+                }
+                callback(err);
+            }
+        });
     };
 
-    my.destroy = function() {
+    this.destroy = function() {
         var arglen = arguments.length;
         if (arglen !== 2) {
             throw new TypeError('Wrong number of arguments. In order to ' +
@@ -353,8 +372,8 @@ var Swarm = module.exports = (function() {
         }
 
         request
-        .del(url + '/' + swarmId)
-        .set(apikeyHeader, apikey)
+        .del(this.url + '/' + swarmId)
+        .set(apikeyHeader, this.apikey)
         .end(function(err, res) {
             if (res.status == 200) {
                 callback(err, res.body);
@@ -367,5 +386,6 @@ var Swarm = module.exports = (function() {
         });
     };
 
-    return my;
-})();
+}).call(Swarm.prototype);
+
+module.exports = Swarm;

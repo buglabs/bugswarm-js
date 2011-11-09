@@ -1,6 +1,6 @@
 module.exports = {
-    Swarm: require('./swarm'),
-    Resource: require('./resource'),
-    Invitation: require('./invitation'),
-    ApiKey: require('./apikey')
+    SwarmService: require('./swarm'),
+    ResourceService: require('./resource'),
+    InvitationService: require('./invitation'),
+    ApiKeyService: require('./apikey')
 };
