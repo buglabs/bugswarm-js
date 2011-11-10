@@ -327,7 +327,7 @@ var Swarm = function(key) {
 
     };
 
-    this.invite = function() {
+    /*this.invite = function() {
         var invitation = {
             to: 'test2',
             resource_id: resource.id,
@@ -349,7 +349,7 @@ var Swarm = function(key) {
                 callback(err);
             }
         });
-    };
+    };*/
 
     this.destroy = function() {
         var arglen = arguments.length;

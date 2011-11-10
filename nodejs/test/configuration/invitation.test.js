@@ -1,10 +1,12 @@
-var ApiKeyService = require('../../bugswarm').configuration.ApiKeyService;
-var InvitationService = require('../../bugswarm').configuration.InvitationService;
-var SwarmService = require('../../bugswarm').configuration.SwarmService;
-var ResourceService = require('../../bugswarm').configuration.ResourceService;
+var bugswarm = require('../../bugswarm').configuration;
+
+var ApiKeyService = bugswarm.ApiKeyService;
+var InvitationService = bugswarm.InvitationService;
+var SwarmService = bugswarm.SwarmService;
+var ResourceService = bugswarm.ResourceService;
 
 describe('Invitation service', function() {
-    //this is ugly
+    //this is ugly, this test is a bit complex though.
     var swarmId;
     var resourceId;
     var apikeyService;
@@ -13,6 +15,7 @@ describe('Invitation service', function() {
     var invitation2Service;
     var swarmService;
     var resourceService;
+    var invitationId;
 
     before(function(done) {
         apikeyService = new ApiKeyService('librarytest', 'test');
@@ -65,15 +68,17 @@ describe('Invitation service', function() {
         invitationService.send(swarmId, _invitation, function(err, invitation) {
             invitation.should.be.a('object');
             invitation.should.have.property('id');
+            //invitationId = invitation.id;
+
             invitation.swarm_id.should.be.eql(swarmId);
             done();
         });
     });
 
-    /*it('should list sent invitations by swarm', function(done) {
-        invitationService.get('sent', swarmId, function(err, invitations) {
+    it('should get sent invitations by swarm', function(done) {
+        invitationService.getSent(swarmId, function(err, invitations) {
             Array.isArray(invitations).should.be.eql(true);
-            invitations.should.be.above(0);
+            invitations.length.should.be.above(0);
             invitations.forEach(function(i) {
                 i.should.have.property('from');
                 i.from.should.be.eql('librarytest');
@@ -83,46 +88,70 @@ describe('Invitation service', function() {
         });
     });
 
-    it('should list all the sent invitations', function(done) {
+    /*it('should list all the sent invitations', function(done) {
         invitationService.get('sent', function(err, invitations) {
             Array.isArray(invitations).should.be.eql(true);
            done();
         });
-    });
+    });*/
 
-    it('should list all the received invitations', function(done) {
-        invitation2Service.get('received', function(err, invitations) {
+    it('should get all the received invitations', function(done) {
+        invitation2Service.getReceived(function(err, invitations) {
+            Array.isArray(invitations).should.be.eql(true);
+            invitations.length.should.be.above(0);
+            invitations.forEach(function(i) {
+                i.should.have.property('to');
+                i.to.should.be.eql('librarytest2');
+            });
             done();
         });
     });
 
-    it('should list received invitations by resource id', function(done) {
-        invitation2Service.get('received', resourceId, function(err, invitations) {
+    it('should get received invitations by resource id', function(done) {
+        invitation2Service.getReceived(resourceId, function(err, invitations) {
+            Array.isArray(invitations).should.be.eql(true);
+            invitations.length.should.be.above(0);
+            invitations.forEach(function(i) {
+                i.should.have.property('to');
+                i.to.should.be.eql('librarytest2');
+                i.resource_id.should.be.eql(resourceId);
+                i.swarm_id.should.be.eql(swarmId);
+                i.should.have.property('id');
+                invitationId = i.id;
+            });
             done();
         });
     });
 
     it('should reject invitations', function(done) {
-        invitation2Service.reject(invitationId, function(err, invitation) {
+        invitation2Service.reject(resourceId, invitationId,
+        function(err, invitation) {
+            invitation.should.be.a('object');
+            invitation.should.have.property('status');
+            invitation.status.should.be.eql('rejected');
             done();
         });
     });
 
     it('should accept invitations', function(done) {
-         var invitation = {
+         var _invitation = {
             to: 'librarytest2',
             resource_id: resourceId,
-            resource_type: 'producer',
-            description: 'Hey feel free to produce information in my Swarm.'
+            resource_type: 'consumer',
+            description: 'ok, join my swarm as consumer then.'
         };
 
-        invitationService.send(swarmId, invitation, function(err, invitation) {
+        invitationService.send(swarmId, _invitation, function(err, invitation) {
             invitation.should.be.a('object');
             invitation.should.have.property('id');
 
-            invitation2Service.accept(invitation.id, function(err, invitation) {
+            invitation2Service.accept(resourceId, invitation.id,
+            function(err, invitation) {
+                invitation.should.be.a('object');
+                invitation.should.have.property('status');
+                invitation.status.should.be.eql('accepted');
                 done();
             });
         });
-    });*/
+    });
 });
