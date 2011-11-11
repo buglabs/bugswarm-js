@@ -1,15 +1,36 @@
-var connection = require('./connection');
+var Connection = require('./connection');
 
-/*var SWARM = module.exports = (function() {
-    var options = { apikey: 'sandbox api key',
-                    resource: 'sandbox resource',
-                    swarms: 'sandbox swarm',
+var Swarm = function() {
+    this.conn = new Connection();
+};
+(function() {
+    var _options = {apikey: '',
+                    resource: '',
+                    swarms: '',
                     onmessage: function(){},
                     onpresence: function(){},
                     onerror: function(){},
                     onconnect: function(){} };
-    this.connect = function(_options) {return this;};
-    this.join = function() {return this;};
-    this.leave = function() {return this;};
-    this.send = function() {return this;};
-}).call(SWARM.prototype);*/
+
+    this.connect = function(options) {
+        for(var i in _options) {
+            if(options[i]) {
+                _options[i] = options[i];
+            }
+        }
+    };
+
+    this.join = function(swarms) {
+
+    };
+
+    this.leave = function(swarms) {
+
+    };
+
+    this.send = function() {
+
+    };
+}).call(Swarm.prototype);
+
+module.exports = new Swarm(); //factory

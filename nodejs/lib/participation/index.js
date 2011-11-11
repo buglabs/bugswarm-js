@@ -1,3 +1,1 @@
-module.exports = {
-    SWARM: require('./swarm')
-};
+module.exports = require('./swarm');
