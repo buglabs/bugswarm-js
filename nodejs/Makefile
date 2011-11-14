@@ -1,17 +1,17 @@
-TESTS = test/configuration/*.js
+SPECS = lib/configuration/specs/*.js lib/participation/specs/*.js
 REPORTER = list
 JSLINT   := /usr/local/bin/gjslint
 FIX_STYLE := /usr/local/bin/fixjsstyle
-JSLINT_PARAMS := --custom_jsdoc_tags public,static --recurse lib/ --recurse test/
+JSLINT_PARAMS := --custom_jsdoc_tags public,static --recurse lib/
 
 test:
 	@NODE_ENV=$(NODE_ENV) ./support/mocha/bin/mocha \
 		--require should \
 		--reporter $(REPORTER) \
 		--ui bdd \
-		$(TESTS)
+		$(SPECS)
 
-install: 
+install:
 	npm install
 
 jslint:

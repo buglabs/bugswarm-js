@@ -1,16 +1,20 @@
-var http = require('http');
 var EventEmitter = require('events').EventEmitter;
-var queue = require('./queue');
+var Queue = require('./queue');
 var config = require('../config');
+
+var http = require('http');
 
 var Connection = module.exports = function() {
     EventEmitter.call(this);
 };
 
+//TODO Reconnections http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html
+//TODO use circular queue to not lose packets when disconnected.
 util.inherits(Connection, EventEmitter);
 
 (function() {
     var req;
+    var queue = new Queue(100000);
 
     this.connect = function(options) {
         var self = this;
@@ -28,9 +32,6 @@ util.inherits(Connection, EventEmitter);
         streamcfg.headers = {};
         streamcfg.headers[config.apikey_header] = options.apikey;
 
-        /**
-         * Docs
-         **/
         req = http.request(streamcfg, function(res) {
             var buffer = '';
             res.on('data', function (chunk) {
@@ -44,25 +45,24 @@ util.inherits(Connection, EventEmitter);
         });
 
         req.on('error', function(err) {
-            self.emit('error', err);
+            //self.emit('error', err);
             //TODO find out the err.code associated to disconnections and
             //reconnect.
+            console.log(err);
         });
 
         //initiates connection
         req.write('\n');
     };
 
-    this.send = function(payload) {
-        //queue.push(payload);
-        var stanza = { message: { payload: payload } };
+    this.send = function(message) {
         try {
-            stanza = JSON.stringify(stanza);
+            message = JSON.stringify(message);
         } catch(e) {
             this.emit('error', e);
         }
-        req.write(stanza);
+        //queue.add(stanza);
+        req.write(message);
     };
 
 }).call(Connection.prototype);
-// verify if the nodejs http module support reconnections following http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html

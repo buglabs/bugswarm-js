@@ -1,0 +1,12 @@
+{
+    "name": "bugswarm-rt",
+    "description": "BUGswarm participation API. Allows to receive and send messages in realtime.",
+    "version": "0.1.0",
+    "keywords" : [ "m2m", "IoT", "realtime", "messaging", "sensor", "hardware", "socket"],
+    "homepage": "http://developer.bugswarm.net",
+    "author": "BugLabs Inc.",
+    "repository": "git://github.com/buglabs/bugswarm-api",
+    "engines": {
+        "node": ">= 0.4.3 < 0.5.0"
+    }
+}
