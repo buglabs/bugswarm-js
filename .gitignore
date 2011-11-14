@@ -1,0 +1,6 @@
+design-api.js
+*.swp
+*.swo
+node_modules
+java/bin
+*.settings.xml
