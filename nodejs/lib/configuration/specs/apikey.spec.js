@@ -1,4 +1,4 @@
-var ApiKeyService = require('../../bugswarm').configuration.ApiKeyService;
+var ApiKeyService = require('../apikey');
 
 describe('ApiKey service', function(){
     var apikeyService;

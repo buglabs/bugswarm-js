@@ -4,7 +4,7 @@ var config = require('../config');
 
 var http = require('http');
 
-var Connection = module.exports = function() {
+var Connection = function() {
     EventEmitter.call(this);
 };
 
@@ -66,3 +66,5 @@ util.inherits(Connection, EventEmitter);
     };
 
 }).call(Connection.prototype);
+
+module.exports = Connection;

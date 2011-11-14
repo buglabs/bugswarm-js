@@ -1,9 +1,7 @@
-var bugswarm = require('../../bugswarm').configuration;
-
-var ApiKeyService = bugswarm.ApiKeyService;
-var InvitationService = bugswarm.InvitationService;
-var SwarmService = bugswarm.SwarmService;
-var ResourceService = bugswarm.ResourceService;
+var InvitationService = require('../invitation');
+var ApiKeyService = require('../apikey');
+var SwarmService = require('../swarm');
+var ResourceService = require('../resource');
 
 describe('Invitation service', function() {
     //this is ugly, this test is a bit complex though.

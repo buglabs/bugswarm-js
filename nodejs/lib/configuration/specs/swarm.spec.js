@@ -1,6 +1,6 @@
-var SwarmService = require('../../bugswarm').configuration.SwarmService;
-var ResourceService = require('../../bugswarm').configuration.ResourceService;
-var ApiKeyService = require('../../bugswarm').configuration.ApiKeyService;
+var SwarmService = require('../swarm');
+var ResourceService = require('../resource');
+var ApiKeyService = require('../apikey');
 
 describe('Swarm service', function(){
     var swarmId;

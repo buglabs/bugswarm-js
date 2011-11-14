@@ -1,5 +1,5 @@
-var ResourceService = require('../../bugswarm').configuration.ResourceService;
-var ApiKeyService = require('../../bugswarm').configuration.ApiKeyService;
+var ResourceService = require('../resource');
+var ApiKeyService = require('../apikey');
 
 describe('Resource service', function(){
     var resourceId;
