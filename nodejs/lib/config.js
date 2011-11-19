@@ -3,9 +3,10 @@ var config = {
         baseurl: 'http://localhost:8002',
         apikey_header: 'x-bugswarmapikey',
         stream: {
-            host: 'localhost',
-            port: 8002,
-            path: '/stream'
+            host: 'api.dev.bugswarm.net',
+            port: 80,
+            path: '/stream',
+            agent: false
         },
         debug: true
     },

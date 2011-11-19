@@ -1,79 +1,76 @@
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
 var Connection = require('./connection');
 
-var Swarm = function() {
+var Swarm = function(options) {
     this.conn = new Connection();
-};
-(function() {
-    var _options = {apikey: '',
+    this.options = {apikey: '',
                     resource: '',
-                    swarms: '',
-                    onmessage: function(){},
-                    onpresence: function(){},
-                    onerror: function(){}};
+                    swarms: ''};
 
-    this.connect = function(options) {
-         if (!options.apikey) {
-            throw new Error('You must provide a Participation API ' +
-            'Key in order to join Swarms. Please go to ' +
-            'http://developer.bugswarm.net/restful_api_keys.html#create ' +
-            'to know how to create your API Keys.');
-        }
+    EventEmitter.call(this);
 
-        if (!options.resource) {
-            throw new Error('You must provide a resource id ' +
-            'in order to join Swarms. Please go to ' +
-            'http://developer.bugswarm.net/restful_user_resources.html#create' +
-            ' to know how to create your resources and ' +
-            'http://developer.bugswarm.net/restful_swarm_resources.html#add ' +
-            'for instructions about how to add your resource ' +
-            'to your existing Swarm.');
-        }
+    if (!options.apikey) {
+        throw new Error('You must provide a Participation API ' +
+        'Key in order to join Swarms. Please go to ' +
+        'http://developer.bugswarm.net/restful_api_keys.html#create ' +
+        'to know how to create your API Keys.');
+    }
 
-        if (!options.swarms ||
-            (Array.isArray(options.swarms) && !options.swarms.length)) {
-            throw new Error('You need to specify which ' +
-            'Swarm(s) you would like to join. Please go to ' +
-            'http://developer.bugswarm.net/restful_swarms.html#create ' +
-            'if you want to know how to create them.');
-        }
+    if (!options.resource) {
+        throw new Error('You must provide a resource id ' +
+        'in order to join Swarms. Please go to ' +
+        'http://developer.bugswarm.net/restful_user_resources.html#create' +
+        ' to know how to create your resources and ' +
+        'http://developer.bugswarm.net/restful_swarm_resources.html#add ' +
+        'for instructions about how to add your resource ' +
+        'to your existing Swarm.');
+    }
 
-        if (options.onmessage &&
-            typeof options.onmessage !== 'function') {
-            throw new Error('onmessage needs to be a function.');
-        }
+    if (!options.swarms ||
+        (Array.isArray(options.swarms) && !options.swarms.length)) {
+        throw new Error('You need to specify which ' +
+        'Swarm(s) you would like to join. Please go to ' +
+        'http://developer.bugswarm.net/restful_swarms.html#create ' +
+        'if you want to know how to create them.');
+    }
 
-        if (options.onpresence &&
-            typeof options.onpresence !== 'function') {
-            throw new Error('onpresence needs to be a function.');
+    for(var i in this.options) {
+        if(options[i]) {
+            this.options[i] = options[i];
         }
+    }
+};
 
-        if (options.onerror &&
-            typeof options.onerror !== 'function') {
-            throw new Error('onerror needs to be a function.');
-        }
+util.inherits(Swarm, EventEmitter);
 
-        if (options.onconnect &&
-            typeof options.onconnect !== 'function') {
-            throw new Error('onconnect needs to a function.');
-        }
-
-        for(var i in _options) {
-            if(options[i]) {
-                _options[i] = options[i];
-            }
-        }
+(function() {
+    this.connect = function() {
+        var self = this;
 
         this.conn.on('message', function(stanza) {
             if(stanza.message) {
-                _options.onmessage(stanza.message);
+                self.emit('message', stanza.message);
             } else if(stanza.presence) {
-                _options.onpresence(stanza.presence);
-            } else if(stanza.error) {
-                _options.onerror(stanza.error);
+                self.emit('presence', stanza.presence);
+            } else if(stanza.errors) {
+                self.emit('error', stanza.errors);
             }
         });
 
-        this.conn.connect(_options);
+        this.conn.on('connect', function() {
+            self.emit('connect');
+        });
+
+        this.conn.on('error', function(err) {
+            self.emit('error', err);
+        });
+
+        this.conn.on('disconnect', function() {
+            self.emit('disconnect');
+        });
+
+        this.conn.connect(this.options);
     };
 
     function presence(swarms, type) {
@@ -160,6 +157,10 @@ var Swarm = function() {
 
         this.conn.send(stanza);
     };
+
+    this.disconnect = function() {
+        this.conn.disconnect();
+    };
 }).call(Swarm.prototype);
 
-module.exports = new Swarm(); //factory
+module.exports = Swarm;
