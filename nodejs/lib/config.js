@@ -5,8 +5,7 @@ var config = {
         stream: {
             host: 'api.dev.bugswarm.net',
             port: 80,
-            path: '/stream',
-            agent: false
+            path: '/stream'
         },
         debug: true
     },
