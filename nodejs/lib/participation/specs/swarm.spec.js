@@ -182,6 +182,7 @@ describe('Swarm participation API', function() {
     });
 
     it('should allow to connect a resource as producer and consumer', function(done) {
+        //PENDING
         done();
     });
 

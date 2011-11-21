@@ -10,7 +10,7 @@ test:
 		--require should \
 		--reporter $(REPORTER) \
 		--ui bdd \
-		--timeout 30000 \
+		--timeout 60000 \
 		$(SPECS)
 
 install:
