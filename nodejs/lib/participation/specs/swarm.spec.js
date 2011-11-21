@@ -182,7 +182,71 @@ describe('Swarm participation API', function() {
     });
 
     it('should allow to connect a resource as producer and consumer', function(done) {
-        //PENDING
+        var swarmService = new SwarmService(cfgKey);
+        var resourceService = new ResourceService(cfgKey);
+
+        var myresource = {
+            name: 'my resource',
+            description: 'This resource will produce and consume data.',
+            machine_type: 'bug'
+        };
+
+        resourceService.create(myresource, function(err, _resource) {
+            var options = {
+                swarm_id: swarmId,
+                resource_id: _resource.id,
+                resource_type: 'consumer'
+            };
+
+            swarmService.addResource(options, function(err) {
+
+                options.resource_type = 'producer';
+
+                swarmService.addResource(options, function(err) {
+                    var producerOptions = {
+                        apikey: partKey,
+                        resource: _resource.id,
+                        swarms: swarmId
+                    };
+
+                    var interval;
+                    var count = 0;
+
+                    var prosumer = new Swarm(producerOptions);
+
+                    prosumer.on('message', function(message) {
+                        message.from.swarm.should.be.eql(swarmId);
+                        message.from.resource.should.be.eql(_resource.id);
+                        message.payload.should.be.eql('yo!');
+                        count++;
+                        if(count == 10) {
+                            clearInterval(interval);
+                            done();
+                        }
+                    });
+
+                    prosumer.on('presence', function(presence) {
+                        if (presence.from.swarm &&
+                            presence.from.swarm == swarmId &&
+                            presence.from.resource == _resource.id) {
+
+                            interval = setInterval(function() {
+                                prosumer.send('yo!');
+                            }, 0);
+                        }
+                    });
+
+                    prosumer.on('error', function(err) {
+                        true.should.be.eql(false);
+                    });
+
+                    prosumer.connect();
+                });
+            });
+        });
+    });
+
+    it('should send and receive private messages', function(done) {
         done();
     });
 
