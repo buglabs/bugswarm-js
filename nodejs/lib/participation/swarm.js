@@ -133,7 +133,7 @@ util.inherits(Swarm, EventEmitter);
         var stanza = {message: {}};
 
         if (swarms) {
-            if (resource && resource.length) {
+            if (!resource || !resource.length) {
                 return new TypeError('Resource should not be empty if ' +
                 'specified.');
             }
@@ -154,6 +154,8 @@ util.inherits(Swarm, EventEmitter);
         }
 
         stanza.message.payload = message;
+
+        //console.log(stanza);
 
         this.conn.send(stanza);
     };

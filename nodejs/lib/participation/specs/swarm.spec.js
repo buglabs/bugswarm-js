@@ -8,7 +8,9 @@ describe('Swarm participation API', function() {
     var cfgKey,
         partKey,
         resourceId,
-        swarmId;
+        swarmId,
+        prosumerId,
+        consumerId;
 
     before(function(done) {
         var apikeyService = new ApiKeyService('librarytest', 'test');
@@ -105,6 +107,8 @@ describe('Swarm participation API', function() {
                 resource_type: 'consumer'
             };
 
+            consumerId = _resource.id;
+
             swarmService.addResource(options, function(err) {
                 var consumerOptions = {
                     apikey: partKey,
@@ -198,12 +202,14 @@ describe('Swarm participation API', function() {
                 resource_type: 'consumer'
             };
 
+            prosumerId = _resource.id;
+
             swarmService.addResource(options, function(err) {
 
                 options.resource_type = 'producer';
 
                 swarmService.addResource(options, function(err) {
-                    var producerOptions = {
+                    var options = {
                         apikey: partKey,
                         resource: _resource.id,
                         swarms: swarmId
@@ -212,15 +218,16 @@ describe('Swarm participation API', function() {
                     var interval;
                     var count = 0;
 
-                    var prosumer = new Swarm(producerOptions);
+                    var prosumer = new Swarm(options);
 
                     prosumer.on('message', function(message) {
                         message.from.swarm.should.be.eql(swarmId);
                         message.from.resource.should.be.eql(_resource.id);
                         message.payload.should.be.eql('yo!');
                         count++;
-                        if(count == 10) {
+                        if(count == 3) {
                             clearInterval(interval);
+                            prosumer.disconnect();
                             done();
                         }
                     });
@@ -232,7 +239,7 @@ describe('Swarm participation API', function() {
 
                             interval = setInterval(function() {
                                 prosumer.send('yo!');
-                            }, 0);
+                            }, 500);
                         }
                     });
 
@@ -247,7 +254,53 @@ describe('Swarm participation API', function() {
     });
 
     it('should send and receive private messages', function(done) {
-        done();
+        var options = {
+            apikey: partKey,
+            resource: prosumerId,
+            swarms: swarmId
+        };
+
+        var options2 = {
+            apikey: partKey,
+            resource: consumerId,
+            swarms: swarmId
+        };
+
+        var prosumer = new Swarm(options);
+        var consumer = new Swarm(options2);
+
+        var interval;
+        var count = 0;
+
+        prosumer.on('presence', function(presence) {
+            if(presence.from.resource == consumerId) {
+                interval = setInterval(function() {
+                    prosumer.send({ message: 'yo in private!',
+                                    swarms: swarmId,
+                                    resource: consumerId });
+                }, 500);
+            }
+        });
+
+        consumer.on('message', function(message) {
+            //console.log(JSON.stringify(message));
+            if (!message.public) {
+                message.payload.should.be.eql('yo in private!');
+                message.public.should.be.eql(false);
+                message.from.swarm.should.be.eql(swarmId);
+                message.from.resource.should.be.eql(prosumerId);
+                count++;
+                if(count == 3) {
+                    clearInterval(interval);
+                    consumer.disconnect();
+                    prosumer.disconnect();
+                    done();
+                }
+            }
+        });
+
+        consumer.connect();
+        prosumer.connect();
     });
 
     it('should connect, join and send messages to more than one swarm',
