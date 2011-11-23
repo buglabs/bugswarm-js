@@ -97,9 +97,10 @@ describe('Resource service', function(){
     it('should destroy a resource', function(done) {
         resourceService.destroy(resourceId, function(err) {
             resourceService.get(resourceId, function(err, _resource) {
-                Array.isArray(err).should.be.eql(true);
-                err[0].should.be.a('object');
-                err[0].description.should.be.eql('Resource not found.');
+                var errors = err.errors;
+                Array.isArray(errors).should.be.eql(true);
+                errors[0].should.be.a('object');
+                errors[0].description.should.be.eql('Resource not found.');
                 done();
             });
         });
