@@ -1,5 +1,5 @@
-#SPECS = lib/configuration/specs/*.js lib/participation/specs/*.js
-SPECS = lib/participation/specs/*.js
+SPECS = lib/configuration/specs/*.js lib/participation/specs/*.js
+#SPECS = lib/participation/specs/*.js
 REPORTER = list
 JSLINT   := /usr/local/bin/gjslint
 FIX_STYLE := /usr/local/bin/fixjsstyle
@@ -14,7 +14,7 @@ test:
 		$(SPECS)
 
 install:
-	npm install
+	npm install --dev
 
 jslint:
 	$(JSLINT) $(JSLINT_PARAMS)
