@@ -41,6 +41,7 @@ util.inherits(Connection, EventEmitter);
         streamcfg.method = 'POST';
         streamcfg.path = path;
 
+        //console.log(streamcfg);
         this.req = http.request(streamcfg, function(res) {
             var buffer = '';
             res.on('data', function (chunk) {
@@ -92,7 +93,7 @@ util.inherits(Connection, EventEmitter);
 
     this.send = function(message) {
         if(!this.connected) {
-            self.emit('error', {errors:
+            this.emit('error', {errors:
                 [ { code:'000',
                     description: 'There is not an open connection with ' +
                     'Swarm server. Please try again.'

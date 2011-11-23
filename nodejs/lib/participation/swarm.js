@@ -63,6 +63,7 @@ util.inherits(Swarm, EventEmitter);
         });
 
         this.conn.on('error', function(err) {
+            console.log(self._events);
             self.emit('error', err);
         });
 
@@ -73,6 +74,9 @@ util.inherits(Swarm, EventEmitter);
         this.conn.connect(this.options);
     };
 
+    /**
+     * @private
+     **/
     function presence(swarms, type) {
         if(!swarms || !swarms.length) {
             throw new TypeError('Wrong parameters, you must provide at least ' +
@@ -149,13 +153,10 @@ util.inherits(Swarm, EventEmitter);
                     to.push(swarms[i]);
                 }
             }
-
             stanza.message.to = to;
         }
 
         stanza.message.payload = message;
-
-        //console.log(stanza);
 
         this.conn.send(stanza);
     };

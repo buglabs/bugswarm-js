@@ -215,18 +215,14 @@ describe('Swarm participation API', function() {
                         swarms: swarmId
                     };
 
-                    var interval;
                     var count = 0;
-
                     var prosumer = new Swarm(options);
-
                     prosumer.on('message', function(message) {
                         message.from.swarm.should.be.eql(swarmId);
                         message.from.resource.should.be.eql(_resource.id);
                         message.payload.should.be.eql('yo!');
                         count++;
                         if(count == 3) {
-                            clearInterval(interval);
                             prosumer.disconnect();
                             done();
                         }
@@ -237,9 +233,9 @@ describe('Swarm participation API', function() {
                             presence.from.swarm == swarmId &&
                             presence.from.resource == _resource.id) {
 
-                            interval = setInterval(function() {
+                            for (var i = 0; i < 4; i++) {
                                 prosumer.send('yo!');
-                            }, 500);
+                            }
                         }
                     });
 
@@ -269,21 +265,18 @@ describe('Swarm participation API', function() {
         var prosumer = new Swarm(options);
         var consumer = new Swarm(options2);
 
-        var interval;
-        var count = 0;
-
         prosumer.on('presence', function(presence) {
             if(presence.from.resource == consumerId) {
-                interval = setInterval(function() {
+                for(var i = 0; i < 4; i++) {
                     prosumer.send({ message: 'yo in private!',
                                     swarms: swarmId,
                                     resource: consumerId });
-                }, 500);
+                }
             }
         });
 
+        var count = 0;
         consumer.on('message', function(message) {
-            //console.log(JSON.stringify(message));
             if (!message.public) {
                 message.payload.should.be.eql('yo in private!');
                 message.public.should.be.eql(false);
@@ -291,7 +284,6 @@ describe('Swarm participation API', function() {
                 message.from.resource.should.be.eql(prosumerId);
                 count++;
                 if(count == 3) {
-                    clearInterval(interval);
                     consumer.disconnect();
                     prosumer.disconnect();
                     done();
@@ -305,6 +297,76 @@ describe('Swarm participation API', function() {
 
     it('should connect, join and send messages to more than one swarm',
     function(done) {
+        var swarmService = new SwarmService(cfgKey);
+        var resourceService = new ResourceService(cfgKey);
+
+        var myswarm = {
+            name: 'my swarm',
+            public: false,
+            description: 'le swarm'
+        };
+
+        swarmService.create(myswarm, function(err, swarm1) {
+            swarmService.create(myswarm, function(err, swarm2) {
+                var options = {
+                    swarm_id: swarm1.id,
+                    resource_id: prosumerId,
+                    resource_type: 'producer'
+                };
+
+                swarmService.addResource(options, function(err) {
+                    options.swarm_id = swarm2.id;
+                    swarmService.addResource(options, function(err) {
+                        options.resource_type = 'consumer';
+                        swarmService.addResource(options, function(err) {
+                            options.swarm_id = swarm1.id;
+                            swarmService.addResource(options, function(err) {
+                                var options = {
+                                    apikey: partKey,
+                                    resource: prosumerId,
+                                    swarms: [swarm1.id, swarm2.id]
+                                };
+
+                                var prosumer = new Swarm(options);
+
+                                prosumer.on('error', function(err) {
+                                    console.log(err);
+                                    true.should.be.eql(false);
+                                });
+
+                                var count = 0;
+                                prosumer.on('presence', function(presence) {
+                                    presence.from.resource.should.be.eql(prosumerId);
+
+                                    if (presence.from.swarm == swarm1.id ||
+                                        presence.from.swarm == swarm2.id) {
+                                        count++;
+                                        if(count == 2) {
+                                            prosumer.send(count);
+                                        }
+                                    }
+                                });
+
+                                var count2 = 0;
+                                prosumer.on('message', function(message) {
+                                    count2++;
+                                    message.from.resource.should.be.eql(prosumerId);
+                                    message.payload.should.be.eql(2);
+                                    if(count2 == 2) {
+                                        done();
+                                        prosumer.disconnect();
+                                    }
+                                });
+                                prosumer.connect();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should allow unregistered consumers if swarm is public', function(done) {
         done();
     });
 
