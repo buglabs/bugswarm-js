@@ -1,7 +1,7 @@
 {
   "name": "swarm-js",
   "description": "BUGswarm is a collection of online services  that allows you to share your data and access your BUGs from the web.",
-  "version": "0.2.0",
+  "version": "0.3.2",
   "homepage": "http://api.bugswarm.net",
   "author": "BugLabs Inc.",
   "repository": "git://github.com/buglabs/bugswarm-api",
@@ -9,7 +9,7 @@
     "node": ">= 0.4.3 < 0.5.0"
   },
   "dependencies": {
-    "socket.io-client": "0.8.6", 
+    "socket.io-client": "0.8.7", 
     "uglify-js": "1.1.0"
   }
 }
