@@ -1,41 +1,39 @@
 (function() {
-  var config;
-  config = {
-    "producer_key": "2526b7ea177b1a3db5706f23cf6e9b8a7d2c1382",
-    "consumer_key": "d0a1ef4bdc1b06e8fa144a2bfec2ef32df59978f",
-    "swarms": ["2fe24b7c3132b4ebdf08054d6391f40da43779a4"],
-    "resources": [""]
-  };
-  describe('Swarm', function() {
-    var config_key, resources, swarms;
-    resources = config.resource_ids;
-    config_key = config.configuration_key;
-    swarms = config.swarm_ids;
-    it('can connect to swarm', function() {
-      return SWARM.connect({
-        apikey: config_key,
-        resource: resources[0],
-        swarms: swarms[0],
-        onconnect: function() {
-          return expect(true).toEqual(true);
-        }
+  var participation_key, resources, swarms;
+  swarms = ["17a98de7ae3ec0f55ccd4b266856de453ba4ea8e"];
+  participation_key = "11b8cd10e071f98d97e2f4dcd44b5ef84ebff056";
+  resources = ["82c05c2b50dda4b10f1981cf20f7cf06e54f5f54"];
+  describe('SWARM', function() {
+    describe('#connect', function() {
+      it('can connect to swarm', function(done) {
+        var errorHandler;
+        console.log('testing swarm connection');
+        SWARM.connect({
+          apikey: participation_key,
+          resource: resources[0],
+          swarms: swarms[0],
+          onerror: errorHandler,
+          onconnect: function(done) {
+            console.log('connected');
+            done();
+          }
+        });
+        errorHandler = function(error) {
+          return console.log('ERROR', error);
+        };
       });
-    });
-    it('can connect to swarm', function() {
-      var onmessage, onpresence;
-      SWARM.connect({
-        apikey: config_key,
-        resource: resources[0],
-        swarms: swarms[0],
-        onmessage: onmessage,
-        onpresence: onpresence
+      return it('can recieve presence', function(done) {
+        SWARM.connect({
+          apikey: participation_key,
+          resource: resources[0],
+          swarms: swarms[0],
+          onpresence: function(stanza) {
+            console.log('OHAI');
+            console.log(stanza.presence);
+            done();
+          }
+        });
       });
-      onmessage = function(stanza) {
-        return expect(stanza.message).toBeTruthy();
-      };
-      return onpresence = function(stanza) {
-        return expect(stanza.presence).toBeTruthy();
-      };
     });
     it('can push data to a swarm', function() {
       return expect(false).toBeTruthy();

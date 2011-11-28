@@ -1,28 +1,31 @@
-config = {
-   "producer_key": "2526b7ea177b1a3db5706f23cf6e9b8a7d2c1382"
- , "consumer_key": "d0a1ef4bdc1b06e8fa144a2bfec2ef32df59978f"
- , "swarms": [ "2fe24b7c3132b4ebdf08054d6391f40da43779a4" ]
- , "resources": [ "" ]
-}
+swarms = [ "17a98de7ae3ec0f55ccd4b266856de453ba4ea8e" ]
+participation_key = "11b8cd10e071f98d97e2f4dcd44b5ef84ebff056"
+resources = [ "82c05c2b50dda4b10f1981cf20f7cf06e54f5f54" ]
 
-describe 'Swarm', ->
+describe 'SWARM', ->
 
-  resources = config.resource_ids
-  config_key = config.configuration_key
-  swarms = config.swarm_ids
+  describe '#connect', ->
+    it 'can connect to swarm', (done) ->
+      console.log 'testing swarm connection'
+      SWARM.connect apikey: participation_key, resource: resources[0], swarms: swarms[0], onerror: errorHandler, onconnect: (done) ->
+        console.log 'connected'
+        done()
+        return
 
-  it 'can connect to swarm', ->
-    SWARM.connect apikey: config_key, resource: resources[0], swarms: swarms[0], onconnect: ->
-      expect(true).toEqual(true)
+      errorHandler = (error) ->
+        console.log 'ERROR', error
 
-  it 'can connect to swarm', ->
-    SWARM.connect apikey: config_key, resource: resources[0], swarms: swarms[0], onmessage: onmessage, onpresence: onpresence
+      return
 
-    onmessage = (stanza) ->
-      expect(stanza.message).toBeTruthy()
 
-    onpresence = (stanza) ->
-      expect(stanza.presence).toBeTruthy()
+    it 'can recieve presence', (done) ->
+      SWARM.connect apikey: participation_key, resource: resources[0], swarms: swarms[0], onpresence: (stanza) ->
+      #  expect(stanza.presence).toBeTruthy()
+        console.log 'OHAI'
+        console.log stanza.presence
+        done()
+        return
+      return
 
   it 'can push data to a swarm', ->
     expect(false).toBeTruthy()
