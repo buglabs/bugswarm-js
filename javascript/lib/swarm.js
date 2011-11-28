@@ -126,8 +126,11 @@
         }
 
         var message = {};
-        if (swarms && !Array.isArray(swarms)) {
-            swarms = [swarms];
+        if (swarms) {
+            if (!Array.isArray(swarms)) {
+                swarms = [swarms];
+            }
+
             message.swarms = swarms;
         }
 
