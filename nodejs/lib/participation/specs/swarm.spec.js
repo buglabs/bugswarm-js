@@ -367,6 +367,45 @@ describe('Swarm participation API', function() {
     });
 
     it('should allow unregistered consumers if swarm is public', function(done) {
+        /*var swarmService = new SwarmService(cfgKey);
+
+        //create a public swarm
+        var myswarm = {
+            name: 'swarm name',
+            public: true,
+            description: 'My public swarm'
+        };
+
+        swarmService.create(myswarm, function(err, swarm) {
+            var options = {
+                apikey: partKey,
+                resource: consumerId,
+                swarms: swarm.id
+            };
+
+            var consumer = new Swarm(options);
+
+            consumer.on('message', function(message) {
+                console.log('message');
+                console.log(message);
+            });
+
+            consumer.on('error', function(err) {
+                //this callback shouldn't be called
+                true.should.be.eql(false);
+            });
+
+            consumer.on('presence', function(presence) {
+                console.log('presence');
+                console.log(presence);
+            });
+
+            consumer.on('connect', function() {
+                console.log('connected!');
+            });
+
+            consumer.connect();
+        });*/
         done();
     });
 
