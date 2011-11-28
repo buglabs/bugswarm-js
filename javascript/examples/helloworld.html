@@ -7,8 +7,9 @@
         <!-- <script src="../dist/dev/swarm-v0.3.0.min.js"></script> -->
         <!-- <script src="../dist/int/swarm-v0.3.0.js"></script>
         <script src="../dist/test/swarm-v0.3.0.js"></script>
-        <script src="../dist/stage/swarm-v0.3.0.js"></script> -->
-        <script src="../dist/prod/swarm-v0.3.1.min.js"></script>
+        <script src="../dist/stage/swarm-v0.3.0.js"></script> 
+        <script src="../dist/prod/swarm-v0.3.1.min.js"></script> -->
+        <script src="../dist/dev/swarm-v0.3.2.js"></script> 
     </head>
     <body>
         <script>
@@ -30,9 +31,9 @@
 
             var timer;
 
-            SWARM.connect({ apikey: '3e98ac6ca152f9bc279d0ef6e6bc9877e1508fd8',
-                            resource: '0da7ce672f5a2e067ee8a0e050ca3e363283ea39',
-                            swarms: ['db07c1f9ff0628e33378cf39dc16df0755cdd3f0'],
+            SWARM.connect({ apikey: '2c96f345be0e975f42861f9d1c0720aaa509fbf5',
+                            resource: '33f3cbb2bab5c49b19eca657341dfcfe96b7332b',
+                            swarms: ['83b89f9c7544f13fb71fcd6b4132a67b85c294bb', '657cc1321dd24a93e119994a9b37e68327a9d7d6'],
                             onmessage: onMessage,
                             onpresence: onPresence,
                             onerror: onError,
@@ -43,7 +44,7 @@
                     clearInterval(timer);
                 }
                 timer = setInterval(function() {
-                    SWARM.send({test: 'foo'});
+                    SWARM.send({test: 'foo'}, ['657cc1321dd24a93e119994a9b37e68327a9d7d6', '83b89f9c7544f13fb71fcd6b4132a67b85c294bb']);
                     //SWARM.send({test: 'foo3'}, ['1234', '4321']);// goes to two swarms
                 }, 5000);
 
