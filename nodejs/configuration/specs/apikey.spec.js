@@ -1,4 +1,4 @@
-var ApiKeyService = require('../apikey');
+var ApiKeyService = require('../lib/apikey');
 
 describe('ApiKey service', function(){
     var apikeyService;

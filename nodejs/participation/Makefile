@@ -1,5 +1,4 @@
-SPECS = lib/configuration/specs/*.js lib/participation/specs/*.js
-#SPECS = lib/participation/specs/*.js
+SPECS = specs/*.js
 REPORTER = list
 JSLINT   := /usr/local/bin/gjslint
 FIX_STYLE := /usr/local/bin/fixjsstyle

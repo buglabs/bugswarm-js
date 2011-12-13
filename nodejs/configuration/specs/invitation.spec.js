@@ -1,7 +1,7 @@
-var InvitationService = require('../invitation');
-var ApiKeyService = require('../apikey');
-var SwarmService = require('../swarm');
-var ResourceService = require('../resource');
+var InvitationService = require('../lib/invitation');
+var ApiKeyService = require('../lib/apikey');
+var SwarmService = require('../lib/swarm');
+var ResourceService = require('../lib/resource');
 
 describe('Invitation service', function() {
     //this is ugly, this test is a bit complex though.

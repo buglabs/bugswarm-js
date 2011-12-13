@@ -1,8 +1,9 @@
-var ApiKeyService = require('../../configuration/apikey');
-var SwarmService = require('../../configuration/swarm');
-var ResourceService = require('../../configuration/resource');
+var bugswarm = require('bugswarm-cfg');
+var ApiKeyService = bugswarm.ApiKeyService;
+var SwarmService = bugswarm.SwarmService;
+var ResourceService = bugswarm.ResourceService;
 
-var Swarm = require('../swarm');
+var Swarm = require('../bugswarm-prt');
 
 describe('Swarm participation API', function() {
     var cfgKey,

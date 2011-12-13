@@ -1,6 +1,6 @@
-var SwarmService = require('../swarm');
-var ResourceService = require('../resource');
-var ApiKeyService = require('../apikey');
+var SwarmService = require('../lib/swarm');
+var ResourceService = require('../lib/resource');
+var ApiKeyService = require('../lib/apikey');
 
 describe('Swarm service', function(){
     var swarmId;

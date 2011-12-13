@@ -1,5 +1,5 @@
-var ResourceService = require('../resource');
-var ApiKeyService = require('../apikey');
+var ResourceService = require('../lib/resource');
+var ApiKeyService = require('../lib/apikey');
 
 describe('Resource service', function(){
     var resourceId;
