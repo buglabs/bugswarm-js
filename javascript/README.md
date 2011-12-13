@@ -12,7 +12,7 @@ we really encourage you to use this version instead of linking it locally in you
 ```html
 <html>
     <head>
-        <script type="text/javascript" src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.min.js"></script>
+        <script type="text/javascript" src="http://cdn.buglabs.net/swarm/swarm-v0.3.2.min.js"></script>
     </head>
     <body>
         <script>
