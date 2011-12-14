@@ -25,7 +25,8 @@ var SwarmConnection = require('bugswarm-prt');
 var options = {
     apikey: 'YOUR PARTICIPATION API KEY',
     resource: 'YOUR RESOURCE ID',
-    swarms: ['SWARM ID 1', 'SWARM ID 2'] //Keep in mind that your resource has to be a participant of any of these swarms.
+    //Keep in mind that your resource has to be a participant in all of these swarms.
+    swarms: ['SWARM ID 1', 'SWARM ID 2'] 
 };
 
 var producer = new SwarmConnection(options);
