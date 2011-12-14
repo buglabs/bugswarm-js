@@ -7,7 +7,7 @@ This library is an implementation of the
 [BUGswarm Configuration API](http://developer.bugswarm.net/configuration_api.html).
 
 ### Features
-Create, update, list and delete the following entities:
+Creates, updates, lists and deletes the following entities:
 
 * swarms
 * resources 
