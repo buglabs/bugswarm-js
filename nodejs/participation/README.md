@@ -17,13 +17,44 @@ This library is an implementation of
 
 ### Usage example
 
-Producing data:
+Consuming data:
 
 ```javascript
-//TODO
+var SwarmConnection = require('bugswarm-prt');
+
+var options = {
+    apikey: 'YOUR PARTICIPATION API KEY',
+    resource: 'YOUR RESOURCE ID',
+    swarms: ['SWARM ID 1', 'SWARM ID 2'] //Keep in mind that your resource has to be a participant of any of these swarms.
+};
+
+var producer = new SwarmConnection(options);
+producer.on('message', function(message) {
+    console.log('message: ' + message);
+});
+
+producer.on('error', function(err) {
+    console.log(err);
+});
+
+producer.on('connect', function(err) {
+    console.log('Connected to the platform');
+});
+
+producer.on('presence', function(presence) {
+    console.log('presence: ' + presence);
+});
+
+producer.on('disconnect', function() {
+    console.log('disconnected');
+});
+
+//here is where the magic starts
+producer.connect();
+
 ```
 
-Consuming:
+Producing data:
 
 ```javascript
 //TODO
