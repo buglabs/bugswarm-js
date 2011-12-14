@@ -17,7 +17,7 @@ This library is an implementation of
 
 ### Usage example
 
-Consuming data:
+####Consuming data:
 
 ```javascript
 var SwarmConnection = require('bugswarm-prt');
@@ -55,7 +55,7 @@ consumer.connect();
 
 ```
 
-Producing data:
+####Producing data:
 
 ```javascript
 var SwarmConnection = require('bugswarm-prt');
