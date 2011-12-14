@@ -29,36 +29,62 @@ var options = {
     swarms: ['SWARM ID 1', 'SWARM ID 2'] 
 };
 
-var producer = new SwarmConnection(options);
-producer.on('message', function(message) {
+var consumer = new SwarmConnection(options);
+consumer.on('message', function(message) {
     console.log('message: ' + message);
 });
 
-producer.on('error', function(err) {
+consumer.on('error', function(err) {
     console.log(err);
 });
 
-producer.on('connect', function(err) {
+consumer.on('connect', function(err) {
     console.log('Connected to the platform');
 });
 
-producer.on('presence', function(presence) {
+consumer.on('presence', function(presence) {
     console.log('presence: ' + presence);
 });
 
-producer.on('disconnect', function() {
+consumer.on('disconnect', function() {
     console.log('disconnected');
 });
 
 //here is where the magic starts
-producer.connect();
+consumer.connect();
 
 ```
 
 Producing data:
 
 ```javascript
-//TODO
+var SwarmConnection = require('bugswarm-prt');
+
+var options = {
+    apikey: 'YOUR PARTICIPATION API KEY',
+    resource: 'YOUR RESOURCE ID',
+    //Keep in mind that your resource has to be a participant in all of these swarms.
+    swarms: ['SWARM ID 1', 'SWARM ID 2'] 
+};
+
+var producer = new SwarmConnection(options);
+var interval;
+
+producer.on('connect', function(err) {
+    /**
+     * Sends a public message every 1 second.
+     **/
+    interval = setInterval(function() {
+        producer.send('yo! in public');
+    }, 1000);  
+});
+
+producer.on('disconnect', function() {
+    clearInterval(interval);
+});
+
+producer.connect();
+
 ```
 
 Take a look at the [documentation]() for details about the library API and, 
