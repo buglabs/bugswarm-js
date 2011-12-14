@@ -1,4 +1,4 @@
-# BUGswarm NodeJS library
+# BUGswarm participation NodeJS library
 
 This library has two main modules: participation and configuration. Use the
 the configuration module to set up your swarms, resources as well as to manage 
@@ -6,16 +6,15 @@ invitations and API keys. Use the participation module to send and receive
 messages and binary data.
 
 This library is an implementation of 
-[BUGswarm API](http://developer.bugswarm.net/).
+[BUGswarm Participation API](http://developer.bugswarm.net/participation_api.html).
 
 ### Features
-* Manages swarms, resources, invitations and apikeys.
 * Sends and receives private and public messages, as well as presence, 
   between swarms and resources.
 * Sends and receives binary files.
 
 ### Installation
-`npm install bugswarm`
+`npm install bugswarm-prt`
 
 ### Usage example
 
