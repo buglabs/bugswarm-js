@@ -1,9 +1,8 @@
 # BUGswarm participation NodeJS library
 
-This library has two main modules: participation and configuration. Use the
-the configuration module to set up your swarms, resources as well as to manage 
-invitations and API keys. Use the participation module to send and receive
-messages and binary data.
+This library allows you to send and receive
+messages and binary data to BUGswarm in realtime, communicate with resources within one swarm as well 
+as resources spread out in different swarms.
 
 This library is an implementation of 
 [BUGswarm Participation API](http://developer.bugswarm.net/participation_api.html).
@@ -31,11 +30,11 @@ Consuming:
 ```
 
 Take a look at the [documentation]() for details about the library API and, 
-for more comprehensive examples, at the [examples]() directory. 
+for more comprehensive usage, at the [specs](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/participation/specs) directory. 
 
 ### Fork it, improve it and send us pull requests.
 ```shell
-git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/nodejs
+git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/nodejs/participation
 ```
 
 ## License
