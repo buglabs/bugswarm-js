@@ -18,7 +18,7 @@ Creates, updates, lists and deletes the following entities:
 `npm install bugswarm-cfg`
 
 Take a look at the [documentation]() for details about the library API and, 
-for more comprehensive examples, at the [examples]() directory. 
+for more comprehensive examples, at the [specs](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/configuration/specs) directory. 
 
 ### Fork it, improve it and send us pull requests.
 ```shell
