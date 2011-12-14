@@ -15,18 +15,12 @@ These packages are an implementation of
 * Sends and receives binary files.
 
 ### Installation
-#### Configuration package
+#### [Configuration package](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/configuration)
 `npm install bugswarm-cfg`
 
-#### Participation package
+#### [Participation package](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/participation)
 `npm install bugswarm-prt`
 
-### Usage example
-* [Participation]()
-* [Configuration]()
-
-Take a look at the [documentation]() for details about the library API and, 
-for more comprehensive examples, at the [examples]() directory. 
 
 ### Fork it, improve it and send us pull requests.
 ```shell
