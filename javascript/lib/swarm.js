@@ -39,6 +39,7 @@
             if (self.debug) {
                 console.log('disconnected');
             }
+            self.options.ondisconnect();
         });
 
         socket.on('error', function(error) {
@@ -88,20 +89,29 @@
             'if you want to know how to create them.');
         }
 
-        if (options.onmessage && typeof options.onmessage !== 'function') {
+        if (options.onmessage &&
+            typeof options.onmessage !== 'function') {
             throw new Error('onmessage needs to be a function.');
         }
 
-        if (options.onpresence && typeof options.onpresence !== 'function') {
+        if (options.onpresence &&
+            typeof options.onpresence !== 'function') {
             throw new Error('onpresence needs to be a function.');
         }
 
-        if (options.onerror && typeof options.onerror !== 'function') {
+        if (options.onerror &&
+            typeof options.onerror !== 'function') {
             throw new Error('onerror needs to be a function.');
         }
 
-        if (options.onconnect && typeof options.onconnect !== 'function') {
-            throw new Error('onconnect needs to a function.');
+        if (options.onconnect &&
+            typeof options.onconnect !== 'function') {
+            throw new Error('onconnect needs to be a function.');
+        }
+
+        if (options.ondisconnect &&
+            typeof options.ondisconnect !== 'function') {
+            throw new Error('ondisconnect needs to be a function.');
         }
 
         if (!Array.isArray(options.swarms)) {
@@ -114,10 +124,15 @@
         options.onpresence = options.onpresence || function() {};
         options.onmessage = options.onmessage || function() {};
         options.onconnect = options.onconnect || function() {};
+        options.ondisconnect = options.ondisconnect || function() {};
 
         if (!this.online) {
             connect.call(this);
         }
+    };
+
+    Swarm.prototype.disconnect = function() {
+        socket.disconnect();
     };
 
     Swarm.prototype.send = function(payload, swarms) {
