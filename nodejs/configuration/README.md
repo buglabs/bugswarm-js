@@ -1,42 +1,28 @@
-# BUGswarm NodeJS library
+# BUGswarm configuration NodeJS library
 
-This library has two main modules: participation and configuration. Use the
-the configuration module to set up your swarms, resources as well as to manage 
-invitations and API keys. Use the participation module to send and receive
-messages and binary data.
+This library allows you to set up your swarms, resources as well as to manage 
+invitations and API keys. 
 
-This library is an implementation of 
-[BUGswarm API](http://developer.bugswarm.net/).
+This library is an implementation of the
+[BUGswarm Configuration API](http://developer.bugswarm.net/configuration_api.html).
 
 ### Features
-* Manages swarms, resources, invitations and apikeys.
-* Sends and receives private and public messages, as well as presence, 
-  between swarms and resources.
-* Sends and receives binary files.
+Creates, updates, lists and deletes the following entities:
+
+* swarms
+* resources 
+* invitations
+* apikeys
 
 ### Installation
-`npm install bugswarm`
-
-### Usage example
-
-Producing data:
-
-```javascript
-//TODO
-```
-
-Consuming:
-
-```javascript
-//TODO
-```
+`npm install bugswarm-cfg`
 
 Take a look at the [documentation]() for details about the library API and, 
-for more comprehensive examples, at the [examples]() directory. 
+for more comprehensive examples, at the [specs](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/configuration/specs) directory. 
 
 ### Fork it, improve it and send us pull requests.
 ```shell
-git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/nodejs
+git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/nodejs/configuration
 ```
 
 ## License

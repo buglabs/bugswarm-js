@@ -1,42 +1,98 @@
-# BUGswarm NodeJS library
+# BUGswarm participation NodeJS library
 
-This library has two main modules: participation and configuration. Use the
-the configuration module to set up your swarms, resources as well as to manage 
-invitations and API keys. Use the participation module to send and receive
-messages and binary data.
+This library allows you to send and receive
+messages and binary data to BUGswarm in realtime, communicate with resources within one swarm as well 
+as resources spread out in different swarms.
 
 This library is an implementation of 
-[BUGswarm API](http://developer.bugswarm.net/).
+[BUGswarm Participation API](http://developer.bugswarm.net/participation_api.html).
 
 ### Features
-* Manages swarms, resources, invitations and apikeys.
 * Sends and receives private and public messages, as well as presence, 
   between swarms and resources.
 * Sends and receives binary files.
 
 ### Installation
-`npm install bugswarm`
+`npm install bugswarm-prt`
 
 ### Usage example
 
-Producing data:
+####Consuming data:
 
 ```javascript
-//TODO
+var SwarmConnection = require('bugswarm-prt');
+
+var options = {
+    apikey: 'YOUR PARTICIPATION API KEY',
+    resource: 'YOUR RESOURCE ID',
+    //Keep in mind that your resource has to be a participant in all of these swarms.
+    swarms: ['SWARM ID 1', 'SWARM ID 2'] 
+};
+
+var consumer = new SwarmConnection(options);
+consumer.on('message', function(message) {
+    console.log('message: ' + message);
+});
+
+consumer.on('error', function(err) {
+    console.log(err);
+});
+
+consumer.on('connect', function(err) {
+    console.log('Connected to the platform');
+});
+
+consumer.on('presence', function(presence) {
+    console.log('presence: ' + presence);
+});
+
+consumer.on('disconnect', function() {
+    console.log('disconnected');
+});
+
+//here is where the magic starts
+consumer.connect();
+
 ```
 
-Consuming:
+####Producing data:
 
 ```javascript
-//TODO
+var SwarmConnection = require('bugswarm-prt');
+
+var options = {
+    apikey: 'YOUR PARTICIPATION API KEY',
+    resource: 'YOUR RESOURCE ID',
+    //Keep in mind that your resource has to be a participant in all of these swarms.
+    swarms: ['SWARM ID 1', 'SWARM ID 2'] 
+};
+
+var producer = new SwarmConnection(options);
+var interval;
+
+producer.on('connect', function(err) {
+    /**
+     * Sends a public message every 1 second.
+     **/
+    interval = setInterval(function() {
+        producer.send('yo! in public');
+    }, 1000);  
+});
+
+producer.on('disconnect', function() {
+    clearInterval(interval);
+});
+
+producer.connect();
+
 ```
 
 Take a look at the [documentation]() for details about the library API and, 
-for more comprehensive examples, at the [examples]() directory. 
+for more comprehensive usage, at the [specs](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/participation/specs) directory. 
 
 ### Fork it, improve it and send us pull requests.
 ```shell
-git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/nodejs
+git clone git@github.com:buglabs/bugswarm-api.git && cd bugswarm-api/nodejs/participation
 ```
 
 ## License

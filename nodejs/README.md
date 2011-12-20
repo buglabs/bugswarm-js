@@ -1,11 +1,11 @@
 # BUGswarm NodeJS library
 
-This library has two main modules: participation and configuration. Use the
-the configuration module to set up your swarms, resources as well as to manage 
-invitations and API keys. Use the participation module to send and receive
+This library has two main packages: participation and configuration. Use the
+the configuration package to set up your swarms, resources as well as to manage 
+invitations and API keys. Use the participation package to send and receive
 messages and binary data.
 
-This library is an implementation of 
+These packages are an implementation of 
 [BUGswarm API](http://developer.bugswarm.net/).
 
 ### Features
@@ -15,24 +15,12 @@ This library is an implementation of
 * Sends and receives binary files.
 
 ### Installation
-`npm install bugswarm`
+#### [Configuration package](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/configuration)
+`npm install bugswarm-cfg`
 
-### Usage example
+#### [Participation package](https://github.com/buglabs/bugswarm-api/tree/master/nodejs/participation)
+`npm install bugswarm-prt`
 
-Producing data:
-
-```javascript
-//TODO
-```
-
-Consuming:
-
-```javascript
-//TODO
-```
-
-Take a look at the [documentation]() for details about the library API and, 
-for more comprehensive examples, at the [examples]() directory. 
 
 ### Fork it, improve it and send us pull requests.
 ```shell
@@ -61,5 +49,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
-
-
