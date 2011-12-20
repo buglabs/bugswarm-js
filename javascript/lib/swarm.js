@@ -132,7 +132,7 @@
     };
 
     Swarm.prototype.disconnect = function() {
-        socket.disconnect();
+        this.socket.disconnect();
     };
 
     Swarm.prototype.send = function(payload, swarms) {
