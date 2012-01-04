@@ -13,7 +13,7 @@ test:
 		$(SPECS)
 
 install:
-	npm install --dev
+	npm install --dev 
 
 jslint:
 	$(JSLINT) $(JSLINT_PARAMS)

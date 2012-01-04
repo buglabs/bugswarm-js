@@ -2,7 +2,7 @@ var util = require('util');
 var fs = require('fs');
 var EventEmitter = require('events').EventEmitter;
 var config = require('../config');
-var request = require('../support/superagent');
+var request = require('superagent');
 
 var Binary = function(key) {
     if (!key || !key.length) {
