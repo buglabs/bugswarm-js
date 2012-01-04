@@ -3,7 +3,7 @@ var ApiKeyService = bugswarm.ApiKeyService;
 var SwarmService = bugswarm.SwarmService;
 var ResourceService = bugswarm.ResourceService;
 
-var Swarm = require('../bugswarm-prt');
+var Swarm = require('../bugswarm-prt').Swarm;
 
 describe('Swarm participation API', function() {
     var cfgKey,

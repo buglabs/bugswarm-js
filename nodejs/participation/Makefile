@@ -5,7 +5,7 @@ FIX_STYLE := /usr/local/bin/fixjsstyle
 JSLINT_PARAMS := --custom_jsdoc_tags public,static --recurse lib/
 
 test:
-	@NODE_ENV=$(NODE_ENV) ./node_modules/.bin/mocha \
+	@NODE_ENV=$(NODE_ENV) ./node_modules/mocha/bin/mocha \
 		--require should \
 		--reporter $(REPORTER) \
 		--ui bdd \

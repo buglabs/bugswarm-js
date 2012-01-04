@@ -1,1 +1,4 @@
-module.exports = require('./swarm');
+module.exports = {
+    Swarm: require('./swarm'),
+    Binary: require('./binary')
+};
