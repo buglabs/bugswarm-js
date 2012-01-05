@@ -57,8 +57,9 @@ util.inherits(Connection, EventEmitter);
                     console.log(e.stack);
                     console.log('Malformed message, not a valid JSON ' +
                     'structure: ---->' + buffer + '<----');
+                } finally {
+                    buffer = '';
                 }
-                buffer = '';
             });
         });
 
@@ -108,7 +109,7 @@ util.inherits(Connection, EventEmitter);
             this.emit('error', e);
         }
         //queue.add(stanza);
-        this.req.write(message);
+        this.req.write(message + '\r\n');
     };
 
     this.disconnect = function() {

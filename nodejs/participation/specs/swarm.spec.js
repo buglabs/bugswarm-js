@@ -153,8 +153,6 @@ describe('Swarm participation API', function() {
 
                 consumer.connect();
 
-
-
                 producer.on('message', function(message) {
                     //we need to fail if this callback gets called.
                     true.should.be.eql(false);
@@ -173,8 +171,8 @@ describe('Swarm participation API', function() {
 
                 producer.on('error', function(err) {
                     //we need to fail if this callback gets called.
-                    console.log(err);
                     true.should.be.eql(false);
+                    producer.disconnect();
                 });
 
                 producer.on('connect', function() {
@@ -242,6 +240,7 @@ describe('Swarm participation API', function() {
 
                     prosumer.on('error', function(err) {
                         true.should.be.eql(false);
+                        prosumer.disconnect();
                     });
 
                     prosumer.connect();
@@ -410,11 +409,39 @@ describe('Swarm participation API', function() {
         done();
     });
 
-    it('should not lose messages if connection goes down', function(done) {
-        done();
+    it('should support sending payloads bigger than 1500 bytes', function(done) {
+        var options = {
+            apikey: partKey,
+            resource: prosumerId,
+            swarms: swarmId
+        };
+
+        var prosumer = new Swarm(options);
+        prosumer.on('error', function(err) {
+            err.should.be.empty();
+        });
+
+        var message = '';
+        for(var i = 0; i < 3000; i++) {
+            message += i + ',';
+        }
+
+        prosumer.on('presence', function(presence) {
+            if(presence.from.swarm == swarmId) {
+                prosumer.send(message);
+            }
+        });
+
+        prosumer.on('message', function(_message) {
+            _message.payload.should.be.eql(message);
+            done();
+            prosumer.disconnect();
+        });
+
+        prosumer.connect();
     });
 
-    it('should re-connect if connection goes down', function(done) {
-        done();
-    });
+    it('should not miss messages if connection goes down')
+
+    it('should re-connect if connection goes down')
 });
