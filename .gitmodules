@@ -1,3 +1,0 @@
-[submodule "nodejs/participation/support/superagent"]
-	path = nodejs/participation/support/superagent
-	url = git@github.com:c4milo/superagent.git
