@@ -81,7 +81,8 @@ util.inherits(Connection, EventEmitter);
                 console.log('connection closed with error!');
                 console.log('initiating reconnection algorithm...');
                 //TODO Reconnections http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html
-                //TODO use circular queue to not lose packets when disconnected.
+                //TODO use circular queue to reduce the amount
+                //packets being lost when disconnected.
             } else {
                 self.connected = false;
                 self.emit('disconnect');

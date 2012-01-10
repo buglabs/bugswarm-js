@@ -93,7 +93,7 @@ util.inherits(Swarm, EventEmitter);
             stanza.presence.type = type;
         }
 
-        this.conn.send(presence);
+        this.conn.send(stanza);
     }
 
     this.join = function(swarms) {
