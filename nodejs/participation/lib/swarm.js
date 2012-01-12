@@ -137,7 +137,7 @@ util.inherits(Swarm, EventEmitter);
         var stanza = {message: {}};
 
         if (swarms) {
-            if (!resource || !resource.length) {
+            if (resource && !resource.length) {
                 return new TypeError('Resource should not be empty if ' +
                 'specified.');
             }
