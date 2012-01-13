@@ -1,18 +1,18 @@
 {
     "name": "bugswarm-prt",
     "description": "[Participation] BUGswarm is platform that allows you to share and access your hardware sensor data easily and effortlessly.",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "keywords" : [ "m2m", "IoT", "realtime", "messaging", "sensor", "hardware", "socket", "configuration"],
     "homepage": "http://developer.bugswarm.net",
     "author": "BugLabs Inc.",
     "repository": "git://github.com/buglabs/bugswarm-api",
     "engines": {
-        "node": ">= 0.4.3 < 0.6.2"
+        "node": "0.6"
     },
 
     "devDependencies": {
         "mocha": "0.3.6",
-        "bugswarm-cfg": "0.1.4"
+        "bugswarm-cfg": "0.1.5"
     },
 
     "dependencies": {
