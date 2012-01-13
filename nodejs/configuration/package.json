@@ -7,7 +7,7 @@
     "author": "BugLabs Inc.",
     "repository": "git://github.com/buglabs/bugswarm-api",
     "engines": {
-        "node": ">= 0.4.3 < 0.6.2"
+        "node": "0.6"
     },
     "devDependencies": {
         "mocha": "0.3.6"
