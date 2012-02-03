@@ -1,6 +1,6 @@
 var config = {
     development: {
-        baseurl: 'http://localhost:8002',
+        baseurl: 'http://localhost:8005',
         apikey_header: 'x-bugswarmapikey',
         stream: {
             host: 'api.dev.bugswarm.net',
@@ -11,7 +11,7 @@ var config = {
     },
 
     integration: {
-        baseurl: 'http://localhost:8002',
+        baseurl: 'http://localhost:8005',
         apikey_header: 'x-bugswarmapikey',
         stream: {
             host: 'localhost',
@@ -22,7 +22,7 @@ var config = {
     },
 
     test: {
-        baseurl: 'http://localhost:8002',
+        baseurl: 'http://localhost:8005',
         apikey_header: 'x-bugswarmapikey',
         stream: {
             host: 'api.test.bugswarm.net',
