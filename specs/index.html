@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Swarm Javascript Library Specifications</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" charset="utf-8"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" 
+            type="text/javascript"
+            charset="utf-8">
+    </script>
+    <script src="../node_modules/mocha/mocha.js" 
+            type="text/javascript"
+            charset="utf-8">
+    </script>
+    <script src="../dist/test/swarm-v0.3.2.js"
+            type="text/javascript"
+            charset="utf-8">
+    </script>
+    <script src="../node_modules/chai/chai.js"
+            type="text/javascript"
+            charset="utf-8">
+    </script>
+
+    <script>mocha.setup('bdd')</script>
+
+    <!-- Linking spec files -->
+    <script src="swarm.spec.js" 
+            type="text/javascript"
+            charset="utf-8">
+    </script>
+
+    <script>
+        onload = function() {
+            expect = chai.expect;
+            mocha.run();
+        };
+    </script>
+</head>
+<body>
+    <div id='mocha'/>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>Barberdt issue</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="../dist/dev/swarm-v0.3.2.js"
+            type="text/javascript"
+            charset="utf-8">
+    </script>
+    <script>
+        /*Open this file twice or more and you should be able 
+            to see presence in the developer console of your browser. */
+        function onPresence(presence) {
+            console.log('presence -> ' + Date.now() + ':' + presence);
+        }
+
+        function onMessage(message) {
+            console.log('message -> ' + Date.now() + ': ' + message);
+        }
+
+        function onError(error) {
+            console.log('error! -> ' + JSON.stringify(error));
+        }
+
+        SWARM.debug = true;
+
+        var timer;
+
+        SWARM.connect({ apikey: '5e05145f8ea4fc3605e814362406104f61af1b71',
+                        resource: '7c4fc1de199004be745f08f727fe75a68a96c9df',
+                        swarms: 'ab641e79607dc21ce748e328c2507188fe914754',
+                        onmessage: onMessage,
+                        onpresence: onPresence,
+                        onerror: onError,
+                        onconnect: 
+            function onConnect() {
+                console.log('connected!');
+                if(timer) { //Clears interval upon re-connection
+                    clearInterval(timer);
+                }
+                timer = setInterval(function() {
+                    SWARM.send({test: 'foo'});
+                    //SWARM.send({test: 'foo3'}, ['1234', '4321']);// goes to two swarms
+                }, 5000);
+
+                /*setTimeout(function() {
+                    SWARM.leave('b8dd7a2786dc78adde20e25efa8b7fc245c333f7');
+                }, 10000);*/
+
+                /**SWARM.leave('660e96311f5ca4c39053726d2d0c81f2661a8ef3');
+                SWARM.leave(['3eb03d425ebbcc8ce77ce0c39f50b591b640e432', 
+                            '8c81c308375c0a1b032a4ad2c555d58a1a97dd85']);
+                SWARM.leave(); //leave all the swarms;
+
+                SWARM.join('8c81c308375c0a1b032a4ad2c555d58a1a97dd85');
+                SWARM.join(['8c81c308375c0a1b032a4ad2c555d58a1a97dd85', '660e96311f5ca4c39053726d2d0c81f2661a8ef3']);*/
+            }});
+    </script>
+</head>
+<body>
+    <div id='mocha'/>
+</body>
+</html>
