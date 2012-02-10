@@ -23,29 +23,29 @@ var config = {
     combine: ['util.js', 'swarm.js'],
     version: {
         major: '0',
-        minor: '3',
-        micro: '2',
+        minor: '4',
+        micro: '0',
         qualifier: ''
     },
     servers: [ //development
         {   'env': 'dev',
-            'api': 'api.dev.bugswarm.net'
+            'api': 'api.dev.bugswarm.com'
         },
         { //integration
             'env': 'int',
-            'api': 'api.int.bugswarm.net'
+            'api': 'api.int.bugswarm.com'
         },
         { //test
             'env': 'test',
-            'api': 'api.test.bugswarm.net'
+            'api': 'api.test.bugswarm.com'
         },
         { //stage
             'env': 'stage',
-            'api': 'api.stage.bugswarm.net'
+            'api': 'api.stage.bugswarm.com'
         },
         { //production
             'env': 'prod',
-            'api': 'api.bugswarm.net'
+            'api': 'api.bugswarm.com'
         }
     ]
 };
