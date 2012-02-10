@@ -1,45 +1,14 @@
-<html>
-    <head>
-        <script src="http://cdn.buglabs.net/swarm/swarm-v1.0.0.beta.js"></script>
-        <!-- BugLabs deployment environments (internal use only) -->
-        <!-- 
-        <script src="../dist/dev/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/int/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/test/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/stage/swarm-v1.0.0.beta.js"></script>
-        <script src="../dist/prod/swarm-v1.0.0.beta.js"></script>
-         -->
-    </head>
-    <body>
-        <script>
-            var socket = io.connect('http://api.bugswarm.net');
-            socket.on('connect', function () {
-                //consumer key
-                var apikey = 'a7b2f5f3a96a99ace62dcab95368f91e86d13474';
-                socket.emit('apikey', apikey);
-		        console.log('socket.io connected');
-            });
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-            socket.on('message', function (message) {
-                console.log(Date.now() + ': ' + JSON.stringify(message));
-            });
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
-            socket.on('connected to backend', function() {
-                console.log('connected to ejabberd');
-                var nick = Math.random() + '' + Date.now();
-                socket.emit('message', { 
-                    presence: {
-                        to: 'c6f3218884763119848054f340b832eb19d59752@swarms.xmpp.bugswarm-dev/browser-' + nick}
-                });
-            });
+  <head>
+    <title>BUGswarm JS API Test</title>
+    <script src='http://cdn.buglabs.net/swarm/dev/swarm-v0.3.2.js'></script>
+  </head>
 
-            socket.on('disconnect', function() {
-                console.log('disconnected');
-            });
+  <body>
+   <script src='test.js'></script>
+  </body>
 
-            socket.on('error', function(error) {
-                console.log('ERROR: ' + JSON.stringify(error));
-            });
-        </script>
-    </body>
 </html>
