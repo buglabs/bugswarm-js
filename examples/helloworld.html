@@ -2,25 +2,25 @@
     <head>
         <!--<script src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.js"></script>
         <script src="http://cdn.buglabs.net/swarm/swarm-v0.3.0.min.js"></script> -->
-        
+
         <!-- BugLabs deployment environments (internal use only) -->
         <!-- <script src="../dist/dev/swarm-v0.3.0.min.js"></script> -->
         <!-- <script src="../dist/int/swarm-v0.3.0.js"></script>
         <script src="../dist/test/swarm-v0.3.0.js"></script>
-        <script src="../dist/stage/swarm-v0.3.0.js"></script> 
+        <script src="../dist/stage/swarm-v0.3.0.js"></script>
         <script src="../dist/prod/swarm-v0.3.1.min.js"></script> -->
-        <script src="../dist/dev/swarm-v0.3.2.js"></script> 
+        <script src="../dist/int/swarm-v0.4.0.js"></script>
     </head>
     <body>
         <script>
             /* Open this file twice or more and you should be able 
                 to see presence in the developer console of your browser. */
             function onPresence(presence) {
-                console.log('presence -> ' + Date.now() + ':' + presence);
+                console.log('presence -> ' + Date.now() + ':' + JSON.stringify(presence));
             }
-        
+
             function onMessage(message) {
-                console.log('message -> ' + Date.now() + ': ' + message);
+                console.log('message -> ' + Date.now() + ': ' + JSON.stringify(message));
             }
 
             function onError(error) {
@@ -30,10 +30,9 @@
             SWARM.debug = true;
 
             var timer;
-
-            SWARM.connect({ apikey: '2c96f345be0e975f42861f9d1c0720aaa509fbf5',
-                            resource: '33f3cbb2bab5c49b19eca657341dfcfe96b7332b',
-                            swarms: ['83b89f9c7544f13fb71fcd6b4132a67b85c294bb', '657cc1321dd24a93e119994a9b37e68327a9d7d6'],
+            SWARM.connect({ apikey: '3e98ac6ca152f9bc279d0ef6e6bc9877e1508fd8',
+                            resource: 'da547d9b429dab8d3cd2e48e184afd70ceece818',
+                            swarms: ['1f7c4122d31ae7cb3872f7d19671d591c8928e8c'],
                             onmessage: onMessage,
                             onpresence: onPresence,
                             onerror: onError,
@@ -44,14 +43,14 @@
                     clearInterval(timer);
                 }
                 timer = setInterval(function() {
-                    SWARM.send({test: 'foo'}, ['657cc1321dd24a93e119994a9b37e68327a9d7d6', '83b89f9c7544f13fb71fcd6b4132a67b85c294bb']);
+                    SWARM.send({test: 'foo'});
                     //SWARM.send({test: 'foo3'}, ['1234', '4321']);// goes to two swarms
-                }, 5000);
+                }, 1000);
 
                 /*setTimeout(function() {
                     SWARM.leave('b8dd7a2786dc78adde20e25efa8b7fc245c333f7');
                 }, 10000);*/
-       
+
                 /**SWARM.leave('660e96311f5ca4c39053726d2d0c81f2661a8ef3');
                 SWARM.leave(['3eb03d425ebbcc8ce77ce0c39f50b591b640e432', 
                             '8c81c308375c0a1b032a4ad2c555d58a1a97dd85']);

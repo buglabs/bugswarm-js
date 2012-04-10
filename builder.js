@@ -29,23 +29,23 @@ var config = {
     },
     servers: [ //development
         {   'env': 'dev',
-            'api': 'api.dev.bugswarm.com'
+            'api': 'stream.dev.bugswarm.com'
         },
         { //integration
             'env': 'int',
-            'api': 'api.int.bugswarm.com'
+            'api': 'stream.int.bugswarm.com'
         },
         { //test
             'env': 'test',
-            'api': 'api.test.bugswarm.com'
+            'api': 'stream.test.bugswarm.com'
         },
         { //stage
             'env': 'stage',
-            'api': 'api.stage.bugswarm.com'
+            'api': 'stream.stage.bugswarm.com'
         },
         { //production
             'env': 'prod',
-            'api': 'api.bugswarm.com'
+            'api': 'stream.bugswarm.com'
         }
     ]
 };
