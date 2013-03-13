@@ -24,7 +24,7 @@ var config = {
     version: {
         major: '0',
         minor: '4',
-        micro: '0',
+        micro: '1',
         qualifier: ''
     },
     servers: [ //development

@@ -1,31 +1,31 @@
-var key = 'eb9ea4425c743e54bee4b8776c0adb50f35d6b33',
-resource = '67c27468ca5a1f86db83c2fddbb85ea18b4ce82d',
-swarm = 'c6cd016dbbff859c0a4e59b2efbe04874918d3b8',
-messageCount = 30,
+var key = '63a0e565521670b1cf32040bf179e2f904146e81',
+resource = '3602159efda226c136854b0e381b00fd49533fe8',
+swarm = '6c67d6493656d32698ec9f820feca33c38d9abf6',
+messageCount = 10,
 intervalId;
 
 document.write('Attempting to connect to swarm...');
 SWARM.connect({apikey: key,
                resource: resource,
                swarms: [swarm],
-               
                //callbacks
                onconnect:
                function onConnect() {
                    document.write("Connected to swarm<br />");
                    sendMessages();
                },
-
                onmessage:
                function onMessage(message) {
                    document.write(JSON.stringify(message) + '<br />');
-                   
                },
-
                onerror:
                function onError(error) {
                    document.write(JSON.stringify(error) + '<br />');
                }
+});
+
+SWARM.addListener('message', function(message) {
+  console.log('Console message listener: ',message);
 });
 
 var sendMessages = function() {
@@ -38,5 +38,7 @@ var sendMessage = function() {
     messageCount--;
     if (messageCount <= 0) {
         clearInterval(intervalId);
+        SWARM.disconnect();
+        document.writeln('Disconnected from swarm<br />');
     }
 };
