@@ -1,7 +1,7 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
 /**
- * Builder for Swarm Client Javascript Library. 
+ * Builder for Swarm Client Javascript Library.
  * It merges files and creates distributable versions.
  *
  **/
@@ -24,24 +24,20 @@ var config = {
     version: {
         major: '0',
         minor: '4',
-        micro: '0',
+        micro: '1',
         qualifier: ''
     },
     servers: [ //development
         {   'env': 'dev',
             'api': 'stream.dev.bugswarm.com'
         },
-        { //integration
-            'env': 'int',
-            'api': 'stream.int.bugswarm.com'
+        { //staging
+            'env': 'staging',
+            'api': 'stream.staging.bugswarm.com'
         },
         { //test
             'env': 'test',
             'api': 'stream.test.bugswarm.com'
-        },
-        { //stage
-            'env': 'stage',
-            'api': 'stream.stage.bugswarm.com'
         },
         { //production
             'env': 'prod',
@@ -100,7 +96,7 @@ function copytree(src, dst) {
             copy(file, newdst);
         }
     }
-};
+}
 
 var rlevel = 0;
 var root;
@@ -131,7 +127,7 @@ function rmtree(_path) {
     if (rlevel === 0 && path.existsSync(root)) {
         fs.rmdirSync(root);
     }
-};
+}
 
 function combine() {
     var api = '';
@@ -166,7 +162,7 @@ function minimize(code) {
 }
 
 // Builder
-function Builder() {};
+function Builder() {}
 
 Builder.prototype.dist = function() {
     var version = config.version;
@@ -221,7 +217,7 @@ var args = process.argv.slice(2);
  * Usage information.
  */
 
-var usage = '' + 
+var usage = '' +
     '\x1b[1mUsage\x1b[0m: ./builder [task]\n' +
     '\n' +
     '\x1b[1mTasks:\x1b[0m\n' +
