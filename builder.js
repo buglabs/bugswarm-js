@@ -23,8 +23,8 @@ var config = {
     combine: ['util.js', 'swarm.js'],
     version: {
         major: '0',
-        minor: '4',
-        micro: '1',
+        minor: '6',
+        micro: '0',
         qualifier: ''
     },
     servers: [ //development
@@ -48,7 +48,7 @@ var config = {
 
 //Utility functions
 function copy(src, dst) {
-    if (!path.existsSync(src)) {
+    if (!fs.existsSync(src)) {
         throw new Error(src + ' does not exists. Nothing to be copied');
     }
 
@@ -71,7 +71,7 @@ function copy(src, dst) {
 }
 
 function copytree(src, dst) {
-    if (!path.existsSync(src)) {
+    if (!fs.existsSync(src)) {
         throw new Error(src + ' does not exists. Nothing to be copied');
     }
 
@@ -82,7 +82,7 @@ function copytree(src, dst) {
     var filenames = fs.readdirSync(src);
     var basedir = src;
 
-    if (!path.existsSync(dst)) {
+    if (!fs.existsSync(dst)) {
         fs.mkdirSync(dst, 0755);
     }
 
@@ -124,7 +124,7 @@ function rmtree(_path) {
         }
     }
 
-    if (rlevel === 0 && path.existsSync(root)) {
+    if (rlevel === 0 && fs.existsSync(root)) {
         fs.rmdirSync(root);
     }
 }
@@ -143,7 +143,7 @@ function combine() {
 
     var socketio = fs.readFileSync(config.socketio_base + '/' + config.socketio_file);
 
-    if (!path.existsSync(distdir)) {
+    if (!fs.existsSync(distdir)) {
         fs.mkdirSync(distdir, 0755);
     }
 
@@ -190,7 +190,7 @@ Builder.prototype.dist = function() {
         var release_min = minimize(_release);
 
         var envdir = distdir + '/' + servers[i].env;
-        if(!path.existsSync(envdir)) {
+        if(!fs.existsSync(envdir)) {
             fs.mkdirSync(envdir, 0755);
         }
 

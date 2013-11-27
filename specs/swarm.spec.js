@@ -1,7 +1,9 @@
 describe('Swarm Javascript API', function() {
-    var swarmOpts = {   apikey: '3b36cb03148a8495b74388ee20913cbbc95d970d',
-                        resource: '20be795073f6b6aba7af04eee57c316452f1e276',
-                        swarms: 'c5adae312485c6bafe5c62cd73e8f09910df7a02' };
+    var swarmOpts = {
+        apikey: 'f6549bb4504c713e65011889fc28cdb04a2e8db0',
+        resource: '4741f99a595bb0014ac6fa7e7668c0338c16a2c7',
+        swarms: '2fbb71bb73b0b2159d0c8819b6883ae1a251b271'
+    };
 
     afterEach(function(done) {
         swarmOpts.onconnect = function() {};
