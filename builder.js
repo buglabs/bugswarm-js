@@ -23,8 +23,8 @@ var config = {
     combine: ['util.js', 'swarm.js'],
     version: {
         major: '0',
-        minor: '6',
-        micro: '1',
+        minor: '7',
+        micro: '0',
         qualifier: ''
     },
     servers: [ //development
