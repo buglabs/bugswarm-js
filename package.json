@@ -1,7 +1,7 @@
 {
   "name": "bugswarm-js",
   "description": "BUGswarm is a collection of online services  that allows you to share your data and access your BUGs from the web.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "homepage": "http://api.bugswarm.net",
   "author": "BugLabs Inc.",
   "repository": "git://github.com/buglabs/bugswarm-api",
